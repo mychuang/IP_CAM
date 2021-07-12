@@ -15,18 +15,17 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-
-	//SecureUdp secUdp;
+	SecureUdp secUdp;
 
 private:
     Ui::MainWindow *ui;
 
-	//void initialUI();
+	void initialUI();
 
 private slots:
-	//void scanning();
-	//void cleanTable();
-	//void updateTable(Device *dev);
+	void scanning();
+	void cleanTable();
+	void updateTable(Device *dev);
 };
 
 #endif // MAINWINDOW_H

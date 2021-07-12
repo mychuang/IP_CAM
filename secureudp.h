@@ -8,36 +8,36 @@
 #include <QThread>
 
 #include "crypto.h"
-//#include "message.h"
-//#include "device.h"
+#include "message.h"
+#include "device.h"
 
-class SecureUdp
+class SecureUdp : public QThread
 {
-	//Q_OBJECT
+	Q_OBJECT
 
 public:
-	SecureUdp();
+	explicit SecureUdp(QObject *parent = nullptr);
 
-	//void prob();
-	//void cleanDeviceList();
+	void prob();
+	void cleanDeviceList();
 
 private:
-    //void generateAesKey();
-	//void requestPublicKey(uint8_t *devMac);
-	//void setAesKey(Device *dev);
-	//void handleProbeResponse(Message *msg);
-	//Device *find_device(uint8_t *mac);
+    void generateAesKey();
+	void requestPublicKey(uint8_t *devMac);
+	void setAesKey(Device *dev);
+	void handleProbeResponse(Message *msg);
+	Device *find_device(uint8_t *mac);
 
 	QHostAddress groupAddress;
 	QUdpSocket udpSender;
 	QUdpSocket udpReceiver;
-	//Device *device;
+	Device *device;
 
-//private slots:
-	//void processPendingDatagrams();
+private slots:
+	void processPendingDatagrams();
 
-//signals:
-	//void newDeviceIn(Device *dev);
+signals:
+	void newDeviceIn(Device *dev);
 
 };
 

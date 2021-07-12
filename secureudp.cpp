@@ -2,27 +2,27 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
-//extern uint8_t mac[6]; // local mac address
-//QList<Device *> deviceList;
+extern uint8_t mac[6]; // local mac address
+QList<Device *> deviceList;
 
-SecureUdp::SecureUdp()
+SecureUdp::SecureUdp(QObject *parent) : QThread(parent)
 {
-	//generateAesKey();
-	//groupAddress = QHostAddress(QStringLiteral(MCAST_ADDR));
+	generateAesKey();
+	groupAddress = QHostAddress(QStringLiteral(MCAST_ADDR));
 
 	//reading data
-	/*bool bindResult = udpReceiver.bind(MCAST_PORT + 1, QUdpSocket::ShareAddress);
+	bool bindResult = udpReceiver.bind(MCAST_PORT + 1, QUdpSocket::ShareAddress);
 	if (!bindResult) {
 		qDebug() << "error bind";
 	}
 	else {
 		qDebug() << "binding in" << MCAST_PORT + 1;
-	}*/
+	}
 
-	//connect(&udpReceiver, &QUdpSocket::readyRead, this, &SecureUdp::processPendingDatagrams);
+	connect(&udpReceiver, &QUdpSocket::readyRead, this, &SecureUdp::processPendingDatagrams);
 }
 
-/*void SecureUdp::generateAesKey(){
+void SecureUdp::generateAesKey(){
     qDebug() << __func__;
         int i;
         int j;
@@ -40,9 +40,9 @@ SecureUdp::SecureUdp()
 
         AES_set_encrypt_key(aes, sizeof(aes)*8, &enc_key);
         AES_set_decrypt_key(aes, sizeof(aes)*8, &dec_key);
-}*/
+}
 
-/*void SecureUdp::prob() {
+void SecureUdp::prob() {
 	qDebug() << __func__;
 
 	struct Message msg;
@@ -53,9 +53,9 @@ SecureUdp::SecureUdp()
 	msg.size = 0;
 
 	udpSender.writeDatagram((const char *)&msg, offsetof(struct Message, data) + msg.size, groupAddress, MCAST_PORT);
-}*/
+}
 
-/*void SecureUdp::processPendingDatagrams() {
+void SecureUdp::processPendingDatagrams() {
 
 	struct Message msg;
 	do {
@@ -73,7 +73,7 @@ SecureUdp::SecureUdp()
 		switch (msg.type) {
 		case MCAST_MSG_PROBE_RESPONSE: {
 			qDebug() << "run: handle Response";
-			//handleProbeResponse(&msg);
+			handleProbeResponse(&msg);
 			break;
 		}
 		case MCAST_MSG_GETPUBKEY_RESPONSE: {
@@ -101,9 +101,9 @@ SecureUdp::SecureUdp()
 	} while (udpReceiver.hasPendingDatagrams());
 
 
-}*/
+}
 
-/*void SecureUdp::handleProbeResponse(Message *msg) {
+void SecureUdp::handleProbeResponse(Message *msg) {
 	Device *dev = find_device(msg->from);
 	if (dev) {
 		qDebug() << __func__ << "duplicate probe response";
@@ -134,10 +134,10 @@ SecureUdp::SecureUdp()
 		msg->from[0], msg->from[1], msg->from[2], msg->from[3], msg->from[4], msg->from[5]);
 
 	emit newDeviceIn(dev);
-	//requestPublicKey(msg->from);
-}*/
+	requestPublicKey(msg->from);
+}
 
-/*Device* SecureUdp::find_device(uint8_t *mac) {
+Device* SecureUdp::find_device(uint8_t *mac) {
 
 	for (int i = 0; i < deviceList.size(); i++) {
 		if (memcmp(deviceList[i]->mac, mac, 6) == 0) {
@@ -148,17 +148,17 @@ SecureUdp::SecureUdp()
 	}
 	qDebug(" %s New Device in !! ", stderr);
 	return NULL;
-}*/
+}
 
-/*void SecureUdp::cleanDeviceList() {
+void SecureUdp::cleanDeviceList() {
 	for (int i = 0; i < deviceList.size(); i++) {
 		RSA_free(deviceList[i]->pKey);
 		delete deviceList[i];
 	}
 	deviceList.clear();
-}*/
+}
 
-/*void SecureUdp::requestPublicKey(uint8_t *devMac) {
+void SecureUdp::requestPublicKey(uint8_t *devMac) {
 	qDebug() << __func__;
 
 	struct Message msg;
@@ -169,9 +169,9 @@ SecureUdp::SecureUdp()
 	msg.size = 0;
 	udpSender.writeDatagram((const char *)&msg, offsetof(struct Message, data) + msg.size,
 		groupAddress, MCAST_PORT);
-}*/
+}
 
-/*void SecureUdp::setAesKey(Device *dev) {
+void SecureUdp::setAesKey(Device *dev) {
 	qDebug() << __func__;
 
 	struct Message msg;
@@ -188,4 +188,4 @@ SecureUdp::SecureUdp()
 
 	udpSender.writeDatagram((const char *)&msg, offsetof(struct Message, data) + msg.size,
 		groupAddress, MCAST_PORT);
-}*/
+}

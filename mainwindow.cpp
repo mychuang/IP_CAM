@@ -22,20 +22,20 @@ QString getMacAddress(uint8_t *mac) {
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow), secUdp(NULL)
 {
     ui->setupUi(this);
 
     //UI
-	//initialUI();
+	initialUI();
     //get local MAC
-	//getMacAddress(mac);
+	getMacAddress(mac);
 
 	//UI object connection
-	//connect(ui->probBtn, &QPushButton::clicked, this, &MainWindow::scanning);
-	//connect(ui->cleanBtn, &QPushButton::clicked, this, &MainWindow::cleanTable);
+	connect(ui->probBtn, &QPushButton::clicked, this, &MainWindow::scanning);
+	connect(ui->cleanBtn, &QPushButton::clicked, this, &MainWindow::cleanTable);
     //model connection
-	//connect(&secUdp, &SecureUdp::newDeviceIn, this, &MainWindow::updateTable);
+	connect(&secUdp, &SecureUdp::newDeviceIn, this, &MainWindow::updateTable);
 }
 
 MainWindow::~MainWindow()
@@ -43,7 +43,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-/*void MainWindow::initialUI() {
+void MainWindow::initialUI() {
 	ui->tableWidget->setRowCount(0);
 	ui->tableWidget->setColumnWidth(0, 180);
 	ui->tableWidget->setColumnWidth(1, 210);
@@ -58,15 +58,15 @@ MainWindow::~MainWindow()
 	ui->cleanBtn->setStyleSheet("background-color: rgb(167,251,183);"
 		"font: 87 12pt Arial Black;"
 		"color: rgb(0, 0, 0)");
-}*/
+}
 
-/*void MainWindow::scanning() {
+void MainWindow::scanning() {
 	ui->probBtn->setStyleSheet("background-color: rgb(179, 179, 179);""color: rgb(255, 255, 255)");
 	ui->probBtn->setEnabled(false);
 	secUdp.prob();
-}*/
+}
 
-/*void MainWindow::cleanTable() {
+void MainWindow::cleanTable() {
 	qDebug() << __func__;
 	ui->tableWidget->clear();
 	ui->tableWidget->setRowCount(0);
@@ -77,9 +77,9 @@ MainWindow::~MainWindow()
 		"color: rgb(0, 0, 0)");
 	QStringList tableHeader = { "MAC", "Model", "Name", "IP" };
 	ui->tableWidget->setHorizontalHeaderLabels(tableHeader);
-}*/
+}
 
-/*void MainWindow::updateTable(Device *dev)
+void MainWindow::updateTable(Device *dev)
 {
 	qDebug() << __func__;
 	int row = ui->tableWidget->rowCount();
@@ -93,4 +93,4 @@ MainWindow::~MainWindow()
 	ui->tableWidget->setItem(row, 1, new QTableWidgetItem(dev->model));
 	ui->tableWidget->setItem(row, 2, new QTableWidgetItem(dev->name));
 	ui->tableWidget->setItem(row, 3, new QTableWidgetItem(dev->ip));
-}*/
+}
