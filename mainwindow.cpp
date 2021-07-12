@@ -1,0 +1,96 @@
+#include "mainwindow.h"
+#include "ui_mainwindow.h"
+
+uint8_t mac[6];
+QString getMacAddress(uint8_t *mac) {
+	QString from;
+
+	foreach(QNetworkInterface netInterface, QNetworkInterface::allInterfaces()) {
+		qDebug() << netInterface.addressEntries().at(1).ip();
+		if (!(netInterface.flags() & QNetworkInterface::IsLoopBack)) {
+			QString strMac = netInterface.hardwareAddress();
+
+			for (int i = 0; i < 6; i++) {
+				mac[i] = (uint8_t)(strMac.mid(i * 3, 2).toInt(NULL, 16));
+			}
+			qDebug() << strMac;
+			return strMac;
+		}
+	}
+	return NULL;
+}
+
+MainWindow::MainWindow(QWidget *parent) :
+    QMainWindow(parent),
+    ui(new Ui::MainWindow)
+{
+    ui->setupUi(this);
+
+    //UI
+	//initialUI();
+    //get local MAC
+	//getMacAddress(mac);
+
+	//UI object connection
+	//connect(ui->probBtn, &QPushButton::clicked, this, &MainWindow::scanning);
+	//connect(ui->cleanBtn, &QPushButton::clicked, this, &MainWindow::cleanTable);
+    //model connection
+	//connect(&secUdp, &SecureUdp::newDeviceIn, this, &MainWindow::updateTable);
+}
+
+MainWindow::~MainWindow()
+{
+    delete ui;
+}
+
+/*void MainWindow::initialUI() {
+	ui->tableWidget->setRowCount(0);
+	ui->tableWidget->setColumnWidth(0, 180);
+	ui->tableWidget->setColumnWidth(1, 210);
+	ui->tableWidget->setColumnWidth(2, 210);
+	ui->tableWidget->setColumnWidth(3, 180);
+	ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+	//Btn UI
+	ui->probBtn->setStyleSheet("background-color: rgb(166, 225, 252);"
+		"font: 87 12pt Arial Black;"
+		"color: rgb(0, 0, 0)");
+	ui->cleanBtn->setStyleSheet("background-color: rgb(167,251,183);"
+		"font: 87 12pt Arial Black;"
+		"color: rgb(0, 0, 0)");
+}*/
+
+/*void MainWindow::scanning() {
+	ui->probBtn->setStyleSheet("background-color: rgb(179, 179, 179);""color: rgb(255, 255, 255)");
+	ui->probBtn->setEnabled(false);
+	secUdp.prob();
+}*/
+
+/*void MainWindow::cleanTable() {
+	qDebug() << __func__;
+	ui->tableWidget->clear();
+	ui->tableWidget->setRowCount(0);
+	//secUdp.cleanDeviceList();
+	ui->probBtn->setEnabled(true);
+    ui->probBtn->setStyleSheet("background-color: rgb(166, 225, 252);"
+		"font: 87 12pt Arial Black;"
+		"color: rgb(0, 0, 0)");
+	QStringList tableHeader = { "MAC", "Model", "Name", "IP" };
+	ui->tableWidget->setHorizontalHeaderLabels(tableHeader);
+}*/
+
+/*void MainWindow::updateTable(Device *dev)
+{
+	qDebug() << __func__;
+	int row = ui->tableWidget->rowCount();
+
+	QString from;
+	from.sprintf("%02x:%02x:%02x:%02x:%02x:%02x",
+		dev->mac[0], dev->mac[1], dev->mac[2], dev->mac[3], dev->mac[4], dev->mac[5]);
+
+	ui->tableWidget->setRowCount(row + 1);
+	ui->tableWidget->setItem(row, 0, new QTableWidgetItem(from));
+	ui->tableWidget->setItem(row, 1, new QTableWidgetItem(dev->model));
+	ui->tableWidget->setItem(row, 2, new QTableWidgetItem(dev->name));
+	ui->tableWidget->setItem(row, 3, new QTableWidgetItem(dev->ip));
+}*/
