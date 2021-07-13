@@ -129,10 +129,10 @@ void MainWindow::deviceOpen(Device *dev, const QJsonObject &obj) {
 		msgbox.setText("Setting right");
 		msgbox.exec();
 	}
-	else {
+	else if (obj["response"] == "GetNetwork") {
 		dialogDevice dialog(&secUdp, this);
+		dialog.updateDevInfo(obj);
 		dialog.exec();
-		//dialog.update_devinfo(obj);
 
 		//ret = dialog.exec();
 		//if (ret == DialogDevice::DialogEdit) { // edit users

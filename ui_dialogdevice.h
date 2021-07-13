@@ -58,10 +58,10 @@ public:
     {
         if (dialogDevice->objectName().isEmpty())
             dialogDevice->setObjectName(QString::fromUtf8("dialogDevice"));
-        dialogDevice->resize(435, 446);
+        dialogDevice->resize(534, 446);
         formLayoutWidget = new QWidget(dialogDevice);
         formLayoutWidget->setObjectName(QString::fromUtf8("formLayoutWidget"));
-        formLayoutWidget->setGeometry(QRect(50, 50, 321, 286));
+        formLayoutWidget->setGeometry(QRect(50, 50, 431, 296));
         formLayout = new QFormLayout(formLayoutWidget);
         formLayout->setObjectName(QString::fromUtf8("formLayout"));
         formLayout->setContentsMargins(0, 0, 0, 0);
@@ -188,7 +188,7 @@ public:
         labUser->setFont(font1);
         horizontalLayoutWidget_2 = new QWidget(dialogDevice);
         horizontalLayoutWidget_2->setObjectName(QString::fromUtf8("horizontalLayoutWidget_2"));
-        horizontalLayoutWidget_2->setGeometry(QRect(50, 340, 321, 80));
+        horizontalLayoutWidget_2->setGeometry(QRect(160, 340, 321, 80));
         horizontalLayout_2 = new QHBoxLayout(horizontalLayoutWidget_2);
         horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
         horizontalLayout_2->setContentsMargins(0, 0, 0, 0);

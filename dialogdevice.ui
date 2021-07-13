@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>435</width>
+    <width>534</width>
     <height>446</height>
    </rect>
   </property>
@@ -18,8 +18,8 @@
     <rect>
      <x>50</x>
      <y>50</y>
-     <width>321</width>
-     <height>286</height>
+     <width>431</width>
+     <height>296</height>
     </rect>
    </property>
    <layout class="QFormLayout" name="formLayout">
@@ -268,7 +268,7 @@
   <widget class="QWidget" name="horizontalLayoutWidget_2">
    <property name="geometry">
     <rect>
-     <x>50</x>
+     <x>160</x>
      <y>340</y>
      <width>321</width>
      <height>80</height>
