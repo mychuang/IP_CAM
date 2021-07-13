@@ -70,7 +70,7 @@ void MainWindow::cleanTable() {
 	qDebug() << __func__;
 	ui->tableWidget->clear();
 	ui->tableWidget->setRowCount(0);
-	//secUdp.cleanDeviceList();
+	secUdp.cleanDeviceList();
 	ui->probBtn->setEnabled(true);
     ui->probBtn->setStyleSheet("background-color: rgb(166, 225, 252);"
 		"font: 87 12pt Arial Black;"

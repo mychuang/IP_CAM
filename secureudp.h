@@ -11,7 +11,7 @@
 #include "message.h"
 #include "device.h"
 
-class SecureUdp : public QThread
+class SecureUdp : public QObject
 {
 	Q_OBJECT
 
@@ -26,7 +26,7 @@ private:
 	void requestPublicKey(uint8_t *devMac);
 	void setAesKey(Device *dev);
 	void handleProbeResponse(Message *msg);
-	Device *find_device(uint8_t *mac);
+	Device *findDevice(uint8_t *mac);
 
 	QHostAddress groupAddress;
 	QUdpSocket udpSender;

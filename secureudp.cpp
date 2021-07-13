@@ -5,7 +5,7 @@
 extern uint8_t mac[6]; // local mac address
 QList<Device *> deviceList;
 
-SecureUdp::SecureUdp(QObject *parent) : QThread(parent)
+SecureUdp::SecureUdp(QObject *parent) : QObject(parent)
 {
 	generateAesKey();
 	groupAddress = QHostAddress(QStringLiteral(MCAST_ADDR));
@@ -78,7 +78,7 @@ void SecureUdp::processPendingDatagrams() {
 		}
 		case MCAST_MSG_GETPUBKEY_RESPONSE: {
 			qDebug() << "run: get PUBKEY";
-			Device *dev = find_device(msg.from);
+			Device *dev = findDevice(msg.from);
 			if (dev) {
 				dev->pKey = loadPUBLICKeyFromString((const char *)msg.data);
 				setAesKey(dev);
@@ -87,7 +87,7 @@ void SecureUdp::processPendingDatagrams() {
 		}
 		case MCAST_MSG_SETAESKEY_ACK: {
 			qDebug() << "run: AES ok!";
-			Device *dev = find_device(msg.from);
+			Device *dev = findDevice(msg.from);
 			if (dev) {
 				dev->aes_ready = true;
 			}
@@ -96,15 +96,15 @@ void SecureUdp::processPendingDatagrams() {
 		default:
 			qDebug() << "%s: unhanlded message type" << msg.type;
 		}
-
-
 	} while (udpReceiver.hasPendingDatagrams());
 
-
+	for (int i = 0; i < deviceList.size(); i++) {
+		qDebug() << deviceList[i]->aes_ready;
+	}
 }
 
 void SecureUdp::handleProbeResponse(Message *msg) {
-	Device *dev = find_device(msg->from);
+	Device *dev = findDevice(msg->from);
 	if (dev) {
 		qDebug() << __func__ << "duplicate probe response";
 		return;
@@ -137,7 +137,7 @@ void SecureUdp::handleProbeResponse(Message *msg) {
 	requestPublicKey(msg->from);
 }
 
-Device* SecureUdp::find_device(uint8_t *mac) {
+Device* SecureUdp::findDevice(uint8_t *mac) {
 
 	for (int i = 0; i < deviceList.size(); i++) {
 		if (memcmp(deviceList[i]->mac, mac, 6) == 0) {
