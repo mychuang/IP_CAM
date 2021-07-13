@@ -1,4 +1,5 @@
 #include "secureudp.h"
+#include <QMessageBox>
 
 extern uint8_t mac[6]; // local mac address
 QList<Device *> deviceList;
@@ -88,6 +89,14 @@ void SecureUdp::processPendingDatagrams() {
 			Device *dev = findDevice(msg.from);
 			if (dev) {
 				dev->aes_ready = true;
+			}
+			break;
+		}
+		case MCAST_MSG_CIPHERDATA: {
+			qDebug() << "run: get CIPHERDATA";
+			Device *dev = findDevice(msg.from);
+			if (dev) {
+				handleCipherdata(dev, &msg);
 			}
 			break;
 		}
@@ -185,15 +194,74 @@ void SecureUdp::setAesKey(Device *dev) {
 		groupAddress, MCAST_PORT);
 }
 
-//void SecureUdp::cmdSend(const QString &cmd, const QJsonObject *data) {
-//	struct Message msg;
-//	qDebug() << "cmd:" << cmd;
+void SecureUdp::cmdSend(const QString &cmd, const QJsonObject *data) {
+	qDebug() << "cmd:" << cmd;
 
-	/*if (!device) {
+	if (!device) {
 		qDebug() << "no active device";
 		return;
 	}
 	else {
-		qDebug() << device->username;
-	}*/
-//}
+		struct Message msg;
+		msg.magic = MCAST_MSG_MAGIC;
+		msg.type = MCAST_MSG_CIPHERDATA;
+		memcpy(msg.from, mac, 6);
+		memcpy(msg.to, device->mac, 6);
+		memset(msg.data, 0, sizeof(msg.data));
+
+		QJsonObject header;
+		header["user"] = device->username;
+		header["pass"] = device->password;
+		QJsonObject root;
+		root["header"] = header;
+		root["cmd"] = cmd;
+		// insert all key/value pairs in data into root object
+		if (data) {
+			QStringList keys = data->keys();
+			foreach(const QString &key, keys) {
+				root[key] = (*data)[key];
+			}
+		}
+
+		//QByteArray bytes;
+		QJsonDocument jsonDoc(root);
+		QByteArray secureCmd;
+		//bytes = jsonDoc.toJson();//
+		secureCmd = jsonDoc.toJson();
+		qDebug() << "json message:" << secureCmd;
+
+		unsigned char msgDataIn[1024];
+		memcpy(msgDataIn, secureCmd.constData(), secureCmd.size() + 1);
+		// including nul terminate, must be times of 16 bytes (AES key length)
+		msg.size = size_with_padding(secureCmd.size() + 1); 
+
+		AES_cbc_encrypt(msgDataIn, msg.data, msg.size, &enc_key, device->iv, AES_ENCRYPT);
+		udpSender.writeDatagram((const char *)&msg, offsetof(struct Message, data) + msg.size, groupAddress, MCAST_PORT);
+		qDebug() << "--- write cmd Datagram ---";
+	}
+}
+
+void SecureUdp::handleCipherdata(Device *dev, struct Message *msg) {
+	char plain[1400];
+	AES_cbc_encrypt(msg->data, (unsigned char *)plain, msg->size,
+		&dec_key, dev->iv, AES_DECRYPT);
+	// if parse json failed => call set_aes_key() again
+
+	QByteArray byteArray(plain);
+	QJsonDocument jsonDoc = QJsonDocument::fromJson(byteArray);
+	if (jsonDoc.isNull()) {
+		QMessageBox msgbox;
+		msgbox.setText("parse error! check secureUdp or Device");
+		msgbox.exec();
+		return;
+	}
+
+	QJsonObject obj = jsonDoc.object();
+	if (obj["response"] == "GetNetwork" || obj["response"] == "SetNetwork") {
+		emit deviceResponse(dev, obj);
+	}
+}
+
+void SecureUdp::setDevice(Device *dev) {
+	device = dev;
+}

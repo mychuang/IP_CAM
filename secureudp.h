@@ -22,13 +22,15 @@ public:
 
 	void prob();
 	void cleanDeviceList();
-	//void cmdSend(const QString &cmd, const QJsonObject *data);
+	void setDevice(Device *dev); //update device from view
+	void cmdSend(const QString &cmd, const QJsonObject *data);
 
 private:
     void generateAesKey();
 	void requestPublicKey(uint8_t *devMac);
 	void setAesKey(Device *dev);
 	void handleProbeResponse(Message *msg);
+	void handleCipherdata(Device *dev, struct Message *msg);
 	Device *findDevice(uint8_t *mac);
 
 	QHostAddress groupAddress;
@@ -41,7 +43,7 @@ private slots:
 
 signals:
 	void newDeviceIn(Device *dev);
-
+	void deviceResponse(Device *dev, const QJsonObject &obj);
 };
 
 #endif // SECUREUDP_H

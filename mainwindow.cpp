@@ -1,3 +1,4 @@
+#include <QMessageBox>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "dialogLogin.h"
@@ -39,6 +40,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(ui->tableWidget, &QTableWidget::cellDoubleClicked, this, &MainWindow::signInOpen);
     //model connection
 	connect(&secUdp, &SecureUdp::newDeviceIn, this, &MainWindow::updateTable);
+	connect(&secUdp, &SecureUdp::deviceResponse, this, &MainWindow::deviceOpen);
 }
 
 MainWindow::~MainWindow()
@@ -106,9 +108,29 @@ void MainWindow::signInOpen(int row, int column){
 	dialogLogin dialog(ui->userNameEdit->text(), ui->passwordEdit->text(), this);
 
 	if (dialog.exec() == QDialog::Accepted) {
-		//dev->username = dialog.username();
-		//dev->password = dialog.password();
-		//secUdp.setDevice(dev);
-		//secUdp.cmd_GetNetwork();
+		dev->username = dialog.getUsername();
+		dev->password = dialog.getPassword();
+		secUdp.setDevice(dev);
+		secUdp.cmdSend("GetNetwork", NULL);
+	}
+}
+
+void MainWindow::deviceOpen(Device *dev, const QJsonObject &obj) {
+	qDebug() << "MainWindow::handle_response";
+
+	if (obj["response"] == "error") {
+		QMessageBox msgbox;
+		msgbox.setText(obj["detail"].toString());
+		msgbox.exec();
+	}
+	else if (obj["response"] == "SetNetwork") {
+		QMessageBox msgbox;
+		msgbox.setText("Setting right");
+		msgbox.exec();
+	}
+	else {
+		QMessageBox msgbox;
+		msgbox.setText("yes");
+		msgbox.exec();
 	}
 }

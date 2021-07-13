@@ -27,6 +27,7 @@ private slots:
 	void cleanTable();
 	void updateTable(Device *dev);
 	void signInOpen(int row, int column);
+	void deviceOpen(Device *dev, const QJsonObject &obj);
 };
 
 #endif // MAINWINDOW_H
