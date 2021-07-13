@@ -76,6 +76,8 @@ public:
         pwdEdit = new QLineEdit(formLayoutWidget);
         pwdEdit->setObjectName(QString::fromUtf8("pwdEdit"));
         pwdEdit->setMinimumSize(QSize(20, 50));
+        pwdEdit->setFont(font);
+        pwdEdit->setEchoMode(QLineEdit::Password);
 
         formLayout->setWidget(1, QFormLayout::FieldRole, pwdEdit);
 

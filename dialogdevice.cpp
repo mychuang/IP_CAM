@@ -93,7 +93,7 @@ void dialogDevice::setNetwork() {
 
 void dialogDevice::setDevInfo(QJsonObject &obj) {
 	obj["devname"] = ui->editName->text();
-	//obj["dhcp"] = ui->btnOn->isChecked();
+	obj["dhcp"] = ui->btnOn->isChecked();
 	
 	if (ui->btnOn->isChecked()) {
 		qDebug() << "DHCP ON -> no others message";

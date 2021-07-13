@@ -59,7 +59,7 @@ public:
         horizontalLayout->setContentsMargins(0, 0, 0, 0);
         probBtn = new QPushButton(horizontalLayoutWidget);
         probBtn->setObjectName(QString::fromUtf8("probBtn"));
-        probBtn->setMinimumSize(QSize(130, 50));
+        probBtn->setMinimumSize(QSize(80, 50));
         QFont font;
         font.setPointSize(14);
         font.setBold(true);
@@ -70,7 +70,7 @@ public:
 
         cleanBtn = new QPushButton(horizontalLayoutWidget);
         cleanBtn->setObjectName(QString::fromUtf8("cleanBtn"));
-        cleanBtn->setMinimumSize(QSize(130, 50));
+        cleanBtn->setMinimumSize(QSize(80, 50));
         cleanBtn->setFont(font);
 
         horizontalLayout->addWidget(cleanBtn);
@@ -86,6 +86,7 @@ public:
         userNameEdit = new QLineEdit(horizontalLayoutWidget);
         userNameEdit->setObjectName(QString::fromUtf8("userNameEdit"));
         userNameEdit->setMinimumSize(QSize(0, 50));
+        userNameEdit->setFont(font1);
 
         horizontalLayout->addWidget(userNameEdit);
 
@@ -98,6 +99,8 @@ public:
         passwordEdit = new QLineEdit(horizontalLayoutWidget);
         passwordEdit->setObjectName(QString::fromUtf8("passwordEdit"));
         passwordEdit->setMinimumSize(QSize(0, 50));
+        passwordEdit->setFont(font1);
+        passwordEdit->setEchoMode(QLineEdit::Password);
 
         horizontalLayout->addWidget(passwordEdit);
 
