@@ -26,6 +26,7 @@ private slots:
 	void scanning();
 	void cleanTable();
 	void updateTable(Device *dev);
+	void signInOpen(int row, int column);
 };
 
 #endif // MAINWINDOW_H

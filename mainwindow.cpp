@@ -1,7 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "dialogLogin.h"
 
 uint8_t mac[6];
+extern QList<Device *> deviceList;
 QString getMacAddress(uint8_t *mac) {
 	QString from;
 
@@ -34,6 +36,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	//UI object connection
 	connect(ui->probBtn, &QPushButton::clicked, this, &MainWindow::scanning);
 	connect(ui->cleanBtn, &QPushButton::clicked, this, &MainWindow::cleanTable);
+	connect(ui->tableWidget, &QTableWidget::cellDoubleClicked, this, &MainWindow::signInOpen);
     //model connection
 	connect(&secUdp, &SecureUdp::newDeviceIn, this, &MainWindow::updateTable);
 }
@@ -93,4 +96,19 @@ void MainWindow::updateTable(Device *dev)
 	ui->tableWidget->setItem(row, 1, new QTableWidgetItem(dev->model));
 	ui->tableWidget->setItem(row, 2, new QTableWidgetItem(dev->name));
 	ui->tableWidget->setItem(row, 3, new QTableWidgetItem(dev->ip));
+}
+
+void MainWindow::signInOpen(int row, int column){
+	qDebug() << __func__;
+
+	Device *dev = deviceList[row];
+
+	dialogLogin dialog(ui->userNameEdit->text(), ui->passwordEdit->text(), this);
+
+	if (dialog.exec() == QDialog::Accepted) {
+		//dev->username = dialog.username();
+		//dev->password = dialog.password();
+		//secUdp.setDevice(dev);
+		//secUdp.cmd_GetNetwork();
+	}
 }

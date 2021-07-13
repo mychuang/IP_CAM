@@ -1,6 +1,4 @@
 #include "secureudp.h"
-#include <QJsonDocument>
-#include <QJsonObject>
 
 extern uint8_t mac[6]; // local mac address
 QList<Device *> deviceList;
@@ -98,9 +96,6 @@ void SecureUdp::processPendingDatagrams() {
 		}
 	} while (udpReceiver.hasPendingDatagrams());
 
-	for (int i = 0; i < deviceList.size(); i++) {
-		qDebug() << deviceList[i]->aes_ready;
-	}
 }
 
 void SecureUdp::handleProbeResponse(Message *msg) {
@@ -189,3 +184,16 @@ void SecureUdp::setAesKey(Device *dev) {
 	udpSender.writeDatagram((const char *)&msg, offsetof(struct Message, data) + msg.size,
 		groupAddress, MCAST_PORT);
 }
+
+//void SecureUdp::cmdSend(const QString &cmd, const QJsonObject *data) {
+//	struct Message msg;
+//	qDebug() << "cmd:" << cmd;
+
+	/*if (!device) {
+		qDebug() << "no active device";
+		return;
+	}
+	else {
+		qDebug() << device->username;
+	}*/
+//}

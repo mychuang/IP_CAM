@@ -6,6 +6,8 @@
 #include <QNetworkInterface>
 #include <QUdpSocket>
 #include <QThread>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 #include "crypto.h"
 #include "message.h"
@@ -20,6 +22,7 @@ public:
 
 	void prob();
 	void cleanDeviceList();
+	//void cmdSend(const QString &cmd, const QJsonObject *data);
 
 private:
     void generateAesKey();
