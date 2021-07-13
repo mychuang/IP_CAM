@@ -23,6 +23,7 @@ public:
 	void prob();
 	void cleanDeviceList();
 	void setDevice(Device *dev); //update device from view
+	Device* getDevice() { return device; }
 	void cmdSend(const QString &cmd, const QJsonObject *data);
 
 private:

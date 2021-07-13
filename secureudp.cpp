@@ -242,6 +242,7 @@ void SecureUdp::cmdSend(const QString &cmd, const QJsonObject *data) {
 }
 
 void SecureUdp::handleCipherdata(Device *dev, struct Message *msg) {
+	qDebug() << __func__;
 	char plain[1400];
 	AES_cbc_encrypt(msg->data, (unsigned char *)plain, msg->size,
 		&dec_key, dev->iv, AES_DECRYPT);
@@ -257,7 +258,9 @@ void SecureUdp::handleCipherdata(Device *dev, struct Message *msg) {
 	}
 
 	QJsonObject obj = jsonDoc.object();
-	if (obj["response"] == "GetNetwork" || obj["response"] == "SetNetwork") {
+	if (obj["response"] == "GetNetwork" || 
+		obj["response"] == "SetNetwork" || 
+		obj["response"] == "error") {
 		emit deviceResponse(dev, obj);
 	}
 }

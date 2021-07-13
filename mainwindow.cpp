@@ -2,6 +2,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "dialogLogin.h"
+#include "dialogDevice.h"
 
 uint8_t mac[6];
 extern QList<Device *> deviceList;
@@ -129,8 +130,16 @@ void MainWindow::deviceOpen(Device *dev, const QJsonObject &obj) {
 		msgbox.exec();
 	}
 	else {
-		QMessageBox msgbox;
-		msgbox.setText("yes");
-		msgbox.exec();
+		dialogDevice dialog(&secUdp, this);
+		dialog.exec();
+		//dialog.update_devinfo(obj);
+
+		//ret = dialog.exec();
+		//if (ret == DialogDevice::DialogEdit) { // edit users
+		//	DialogUsers dialog(&secUdp, this);
+		//	dialog.exec();
+		//}
+		//else {
+		//}
 	}
 }
