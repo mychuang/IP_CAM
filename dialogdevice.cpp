@@ -21,6 +21,11 @@ dialogDevice::dialogDevice(SecureUdp *s, QWidget *parent) :
 	//
 	connect(ui->btnOn, &QAbstractButton::clicked, this, &dialogDevice::dhcpOn);
 	connect(ui->btnOff, &QAbstractButton::clicked, this, &dialogDevice::dhcpOff);
+	connect(ui->btnExit, &QAbstractButton::clicked, this, &dialogDevice::reject);
+	connect(ui->btnUpdate, &QAbstractButton::clicked, this, &dialogDevice::setNetwork);
+	connect(ui->btnUpdate, &QAbstractButton::clicked, this, &dialogDevice::accept);
+	connect(ui->btnEdit, &QAbstractButton::clicked, this, &dialogDevice::userEditOpen);
+
 }
 
 dialogDevice::~dialogDevice()
@@ -47,7 +52,6 @@ void dialogDevice::updateDevInfo(const QJsonObject &obj) {
 	ui->editDNS->setText(dns);
 	
 	if (obj["dhcp"].toBool()) {
-		qDebug() << "hi";
 		ui->editIP->setDisabled(true);
 		ui->editNetmask->setDisabled(true);
 		ui->editGateway->setDisabled(true);
@@ -79,3 +83,44 @@ void dialogDevice::dhcpOff(){
 	ui->editGateway->setDisabled(false);
 	ui->editDNS->setDisabled(false);
 }
+
+void dialogDevice::setNetwork() {
+	qDebug() << __func__;
+	QJsonObject obj;
+	setDevInfo(obj);
+	secUdp->cmdSend("SetNetwork", &obj);
+}
+
+void dialogDevice::setDevInfo(QJsonObject &obj) {
+	obj["devname"] = ui->editName->text();
+	//obj["dhcp"] = ui->btnOn->isChecked();
+	
+	if (ui->btnOn->isChecked()) {
+		qDebug() << "DHCP ON -> no others message";
+	}
+
+	if (ui->btnOff->isChecked()) {
+		obj["ip"] = ui->editIP->text();
+		obj["netmask"] = ui->editNetmask->text();
+		obj["gateway"] = ui->editGateway->text();
+	}
+
+	if (ui->editDNS->text().size() > 0) {
+		QStringList dns_list = ui->editDNS->text().split(",", QString::SkipEmptyParts);
+		QJsonArray array;
+		for (int i = 0; i < dns_list.count(); i++) {
+			array.append(dns_list[i]);
+			qDebug() << "DNS: " << dns_list[i];
+		}
+		obj.insert("dns", array);
+	}
+	else {
+		qDebug() << "DNS error ";
+	}
+
+}
+
+void dialogDevice::userEditOpen() {
+	qDebug() << __func__;
+}
+

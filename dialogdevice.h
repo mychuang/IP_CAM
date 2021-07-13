@@ -24,10 +24,13 @@ private:
     Ui::dialogDevice *ui;
 
 	SecureUdp *secUdp;
+	void setDevInfo(QJsonObject &obj);
 
 private slots:
 	void dhcpOn();
 	void dhcpOff();
+	void setNetwork();
+	void userEditOpen();
 };
 
 #endif // DIALOGDEVICE_H

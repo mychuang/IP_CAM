@@ -125,9 +125,8 @@ void MainWindow::deviceOpen(Device *dev, const QJsonObject &obj) {
 		msgbox.exec();
 	}
 	else if (obj["response"] == "SetNetwork") {
-		QMessageBox msgbox;
-		msgbox.setText("Setting right");
-		msgbox.exec();
+		cleanTable();
+		scanning();
 	}
 	else if (obj["response"] == "GetNetwork") {
 		dialogDevice dialog(&secUdp, this);

@@ -238,6 +238,7 @@ void SecureUdp::cmdSend(const QString &cmd, const QJsonObject *data) {
 		AES_cbc_encrypt(msgDataIn, msg.data, msg.size, &enc_key, device->iv, AES_ENCRYPT);
 		udpSender.writeDatagram((const char *)&msg, offsetof(struct Message, data) + msg.size, groupAddress, MCAST_PORT);
 		qDebug() << "--- write cmd Datagram ---";
+
 	}
 }
 
