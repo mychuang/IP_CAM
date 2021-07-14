@@ -1,4 +1,5 @@
 #include "dialogdevice.h"
+#include "dialoguser.h"
 #include "ui_dialogdevice.h"
 #include <QJsonArray>
 
@@ -122,5 +123,7 @@ void dialogDevice::setDevInfo(QJsonObject &obj) {
 
 void dialogDevice::userEditOpen() {
 	qDebug() << __func__;
+	dialogUser dialog(secUdp, this);
+	dialog.exec();
 }
 

@@ -259,10 +259,14 @@ void SecureUdp::handleCipherdata(Device *dev, struct Message *msg) {
 	}
 
 	QJsonObject obj = jsonDoc.object();
+	qDebug() << obj["response"];
 	if (obj["response"] == "GetNetwork" || 
 		obj["response"] == "SetNetwork" || 
 		obj["response"] == "error") {
 		emit deviceResponse(dev, obj);
+	}
+	else if(obj["response"] == "GetUsers"){
+		emit UserResponse(dev, obj);
 	}
 }
 

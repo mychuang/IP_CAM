@@ -45,6 +45,7 @@ private slots:
 signals:
 	void newDeviceIn(Device *dev);
 	void deviceResponse(Device *dev, const QJsonObject &obj);
+	void UserResponse(Device *dev, const QJsonObject &obj);
 };
 
 #endif // SECUREUDP_H
