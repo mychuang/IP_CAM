@@ -25,7 +25,7 @@ dialogDevice::dialogDevice(SecureUdp *s, QWidget *parent) :
 	connect(ui->btnExit, &QAbstractButton::clicked, this, &dialogDevice::reject);
 	connect(ui->btnUpdate, &QAbstractButton::clicked, this, &dialogDevice::setNetwork);
 	connect(ui->btnUpdate, &QAbstractButton::clicked, this, &dialogDevice::accept);
-	connect(ui->btnEdit, &QAbstractButton::clicked, this, &dialogDevice::userEditOpen);
+	connect(ui->btnEdit, &QAbstractButton::clicked, this, &dialogDevice::userEditReturn);
 
 }
 
@@ -121,9 +121,7 @@ void dialogDevice::setDevInfo(QJsonObject &obj) {
 
 }
 
-void dialogDevice::userEditOpen() {
-	qDebug() << __func__;
-	dialogUser dialog(secUdp, this);
-	dialog.exec();
+void dialogDevice::userEditReturn() {
+	done(btnUserEdit);
 }
 

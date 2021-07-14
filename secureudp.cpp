@@ -262,12 +262,13 @@ void SecureUdp::handleCipherdata(Device *dev, struct Message *msg) {
 	qDebug() << obj["response"];
 	if (obj["response"] == "GetNetwork" || 
 		obj["response"] == "SetNetwork" || 
-		obj["response"] == "error") {
+		obj["response"] == "error" ||
+		obj["response"] == "GetUsers") {
 		emit deviceResponse(dev, obj);
 	}
-	else if(obj["response"] == "GetUsers"){
-		emit UserResponse(dev, obj);
-	}
+	//else if(obj["response"] == "GetUsers"){
+	//	emit UserResponse(dev, obj);
+	//}
 }
 
 void SecureUdp::setDevice(Device *dev) {

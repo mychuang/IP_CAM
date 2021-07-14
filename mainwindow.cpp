@@ -3,6 +3,7 @@
 #include "ui_mainwindow.h"
 #include "dialogLogin.h"
 #include "dialogDevice.h"
+#include "dialoguser.h"
 
 uint8_t mac[6];
 extern QList<Device *> deviceList;
@@ -41,7 +42,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(ui->tableWidget, &QTableWidget::cellDoubleClicked, this, &MainWindow::signInOpen);
     //model connection
 	connect(&secUdp, &SecureUdp::newDeviceIn, this, &MainWindow::updateTable);
-	connect(&secUdp, &SecureUdp::deviceResponse, this, &MainWindow::deviceOpen);
+	connect(&secUdp, &SecureUdp::deviceResponse, this, &MainWindow::handleResponse);
 }
 
 MainWindow::~MainWindow()
@@ -116,8 +117,8 @@ void MainWindow::signInOpen(int row, int column){
 	}
 }
 
-void MainWindow::deviceOpen(Device *dev, const QJsonObject &obj) {
-	qDebug() << "MainWindow::handle_response";
+void MainWindow::handleResponse(Device *dev, const QJsonObject &obj) {
+	qDebug() << "MainWindow::handleResponse";
 
 	if (obj["response"] == "error") {
 		QMessageBox msgbox;
@@ -131,14 +132,15 @@ void MainWindow::deviceOpen(Device *dev, const QJsonObject &obj) {
 	else if (obj["response"] == "GetNetwork") {
 		dialogDevice dialog(&secUdp, this);
 		dialog.updateDevInfo(obj);
-		dialog.exec();
 
-		//ret = dialog.exec();
-		//if (ret == DialogDevice::DialogEdit) { // edit users
-		//	DialogUsers dialog(&secUdp, this);
-		//	dialog.exec();
-		//}
-		//else {
-		//}
+		int ret = dialog.exec();
+		if (ret == dialogDevice::btnUserEdit) { // edit users
+			secUdp.cmdSend("GetUsers", NULL);
+		}
+	}
+	else if (obj["response"] == "GetUsers") {
+		dialogUser dialog(&secUdp, this);
+		dialog.updateUserinfo(obj);
+		dialog.exec();
 	}
 }

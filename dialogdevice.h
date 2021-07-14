@@ -19,7 +19,7 @@ public:
     ~dialogDevice();
 
 	void updateDevInfo(const QJsonObject &obj);
-
+	static const int btnUserEdit = 2;
 private:
     Ui::dialogDevice *ui;
 
@@ -30,7 +30,7 @@ private slots:
 	void dhcpOn();
 	void dhcpOff();
 	void setNetwork();
-	void userEditOpen();
+	void userEditReturn();
 };
 
 #endif // DIALOGDEVICE_H

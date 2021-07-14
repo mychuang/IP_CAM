@@ -2,6 +2,7 @@
 #define DIALOGUSER_H
 
 #include <QDialog>
+#include <QJsonArray>
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QString>
@@ -20,6 +21,8 @@ class dialogUser : public QDialog
 public:
     explicit dialogUser(SecureUdp *s, QWidget *parent = nullptr);
     ~dialogUser();
+
+	void updateUserinfo(const QJsonObject &obj);
 
 private:
     Ui::dialogUser *ui;
