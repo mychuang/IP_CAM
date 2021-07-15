@@ -80,6 +80,7 @@ public:
         editPwd = new QLineEdit(gridLayoutWidget);
         editPwd->setObjectName(QString::fromUtf8("editPwd"));
         editPwd->setFont(font);
+        editPwd->setEchoMode(QLineEdit::Password);
 
         gridLayout->addWidget(editPwd, 1, 1, 1, 1);
 
@@ -92,6 +93,7 @@ public:
         editPwdChk = new QLineEdit(gridLayoutWidget);
         editPwdChk->setObjectName(QString::fromUtf8("editPwdChk"));
         editPwdChk->setFont(font);
+        editPwdChk->setEchoMode(QLineEdit::Password);
 
         gridLayout->addWidget(editPwdChk, 2, 1, 1, 1);
 

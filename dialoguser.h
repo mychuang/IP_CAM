@@ -23,7 +23,7 @@ public:
 
 	void updateUserinfo(const QJsonObject &obj);
 	static const int btnQuit = 2;
-	static const int btnDel = 3;
+	static const int btnInt = 3;
 
 private:
     Ui::dialogUser *ui;
@@ -38,6 +38,8 @@ private slots:
 signals:
 	void userQuitSignal();
 	void userDelSignal(QString username);
+	void userEditSignal(QString username, QString password, QString authority);
+	void userAddSignal(QString username, QString password, QString authority);
 };
 
 #endif // DIALOGUSER_H

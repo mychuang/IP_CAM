@@ -31,6 +31,12 @@ private slots:
 	void signInOpen(int row, int column);
 	void handleResponse(Device *dev, const QJsonObject &obj);
 	//hangle userDialog
+	void handleUserAdd(QString username, QString password, QString authority) { 
+		secUdp.cmdAddUser(username, password, authority);
+	};
+	void handleUserEdit(QString username, QString password, QString authority) { 
+		secUdp.cmdSetUser(username, password, authority);
+	};
 	void handleUserDel(QString username) { secUdp.cmdDelUser(username);};
 	void handleUserQuit() { secUdp.prob(); };
 };

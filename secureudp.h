@@ -26,6 +26,8 @@ public:
 	Device* getDevice() { return device; }
 	void cmdSend(const QString &cmd, const QJsonObject *data);
 	void cmdDelUser(QString username);
+	void cmdAddUser(QString username, QString password, QString authority);
+	void cmdSetUser(QString username, QString password, QString authority);
 	
 
 private:

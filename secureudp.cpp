@@ -283,3 +283,18 @@ void SecureUdp::cmdDelUser(QString username) {
 	cmdSend("DelUser", &obj);
 }
 
+void SecureUdp::cmdSetUser(QString username, QString password, QString authority) {
+	QJsonObject obj;
+	obj["username"] = username;
+	obj["password"] = password;
+	obj["authority"] = authority;
+	cmdSend("SetUser", &obj);
+}
+
+void SecureUdp::cmdAddUser(QString username, QString password, QString authority) {
+	QJsonObject obj;
+	obj["username"] = username;
+	obj["password"] = password;
+	obj["authority"] = authority;
+	cmdSend("AddUser", &obj);
+}

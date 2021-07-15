@@ -38,10 +38,14 @@ void dialogUser::updateUserinfo(const QJsonObject &obj) {
 
 void dialogUser::userAddOpen(){
 	qDebug() << __func__;
-	//Dialoguseredit dialog(this);
+	dialogUserEdit dialog(this);
 
-	//if (dialog.exec() == QDialog::Accepted)
-	//	secUdp->cmd_AddUser(dialog.username(), dialog.password());
+	if (dialog.exec() == QDialog::Accepted) {
+		emit userAddSignal(dialog.username(), dialog.password(), dialog.authority());
+		dialog.done(3);
+		done(btnInt);
+	}
+
 }
 
 void dialogUser::userEditOpen(){
@@ -52,8 +56,9 @@ void dialogUser::userEditOpen(){
 		QString user = ui->tableWidget->item(index, 0)->text();
 		dialogUserEdit dialog(user, this);
 		if (dialog.exec() == QDialog::Accepted) {
-			//		secUdp->cmd_SetUser(user, dialog.password());
-
+			emit userEditSignal(user, dialog.password(), dialog.authority());
+			dialog.done(3);
+			done(btnInt);
 		}
 	}
 }
@@ -77,7 +82,7 @@ void dialogUser::userDel(){
 	if (reply == QMessageBox::Yes) {
 		if (index >= 0) {
 			emit userDelSignal(ui->tableWidget->item(index, 0)->text());
-			done(btnDel);
+			done(btnInt);
 		}
 	}
 }

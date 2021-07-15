@@ -45,7 +45,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	//dialogUser connection
 	connect(&dialogUserObj, &dialogUser::userDelSignal, this, &MainWindow::handleUserDel);
 	connect(&dialogUserObj, &dialogUser::userQuitSignal, this, &MainWindow::handleUserQuit);
-	
+	connect(&dialogUserObj, &dialogUser::userAddSignal, this, &MainWindow::handleUserAdd);
+	connect(&dialogUserObj, &dialogUser::userEditSignal, this, &MainWindow::handleUserEdit);
 }
 
 MainWindow::~MainWindow()
@@ -145,20 +146,18 @@ void MainWindow::handleResponse(Device *dev, const QJsonObject &obj) {
 		return;
 	}
 	else if (obj["response"] == "GetUsers") {
-		qDebug() << "open dialogUser";
-
 		dialogUserObj.updateUserinfo(obj);
 		int ret = dialogUserObj.exec();
 		if (ret == dialogUser::btnQuit) {
-			//cleanTable();
-			//scanning();
 			dialogUserObj.close();
 		}
-
 		return;
 	}
-	else if (obj["response"] == "DelUser") {
+	else if (obj["response"] == "DelUser" ||
+		     obj["response"] == "AddUser" ||
+		     obj["response"] == "SetUser") {
 		secUdp.cmdSend("GetUsers", NULL);
+		return;
 	}
 }
 
