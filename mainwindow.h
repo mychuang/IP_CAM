@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "Secureudp.h"
+#include "dialoguser.h"
 
 namespace Ui {
 class MainWindow;
@@ -16,6 +17,7 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 	SecureUdp secUdp;
+	dialogUser dialogUserObj;
 
 private:
     Ui::MainWindow *ui;
@@ -28,6 +30,9 @@ private slots:
 	void updateTable(Device *dev);
 	void signInOpen(int row, int column);
 	void handleResponse(Device *dev, const QJsonObject &obj);
+	//hangle userDialog
+	void handleUserDel(QString username) { secUdp.cmdDelUser(username);};
+	void handleUserQuit() { secUdp.prob(); };
 };
 
 #endif // MAINWINDOW_H

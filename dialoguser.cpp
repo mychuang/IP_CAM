@@ -1,16 +1,20 @@
 #include "dialoguser.h"
 #include "ui_dialoguser.h"
+#include <QMessageBox>
 
-dialogUser::dialogUser(SecureUdp *s, QWidget *parent) :
+
+dialogUser::dialogUser(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::dialogUser), secUdp(s)
+    ui(new Ui::dialogUser)
 {
     ui->setupUi(this);
-	ui->tableWidget->setColumnWidth(0, 410);
+	ui->tableWidget->setColumnWidth(0, 300);
 
-	//connect(secUdp, &SecureUdp::UserResponse, this, &dialogUser::handleResponse);
-	//secUdp->cmdSend("GetUsers", NULL);
+	connect(ui->btnAdd, &QPushButton::clicked, this, &dialogUser::userAddOpen);
+	connect(ui->btnEdit, &QPushButton::clicked, this, &dialogUser::userEditOpen);
 
+	connect(ui->btnDel, &QPushButton::clicked, this, &dialogUser::userDel);
+	connect(ui->btnQuit, &QPushButton::clicked, this, &dialogUser::userQuit);
 }
 
 dialogUser::~dialogUser()
@@ -20,19 +24,6 @@ dialogUser::~dialogUser()
 
 void dialogUser::handleResponse(Device *dev, const QJsonObject &obj) {
 	qDebug() << "DialogUsers::handle_response" << obj;
-
-	if (obj["response"].toString() == "GetUsers") {
-		qDebug() << "GetUsers";
-	//	update_userinfo(obj);
-	}
-	else if (obj["response"].toString() == "AddUser") { // success, reload
-		qDebug() << "AddUsers";
-		secUdp->cmdSend("GetUsers", NULL);
-	}
-	else if (obj["response"].toString() == "DelUser") { // success, reload
-		qDebug() << "DelUser";
-		secUdp->cmdSend("GetUsers", NULL);
-	}
 }
 
 void dialogUser::updateUserinfo(const QJsonObject &obj) {
@@ -46,4 +37,53 @@ void dialogUser::updateUserinfo(const QJsonObject &obj) {
 		ui->tableWidget->setItem(row, 0, new QTableWidgetItem(user["username"].toString()));
 	}
 	ui->tableWidget->setCurrentCell(0, 0);
+}
+
+void dialogUser::userAddOpen(){
+	qDebug() << __func__;
+	//Dialoguseredit dialog(this);
+
+	//if (dialog.exec() == QDialog::Accepted)
+	//	secUdp->cmd_AddUser(dialog.username(), dialog.password());
+}
+
+void dialogUser::userEditOpen(){
+	qDebug() << __func__;
+	int index;
+	index = ui->tableWidget->currentRow();
+	if (index >= 0) {
+		QString user = ui->tableWidget->item(index, 0)->text();
+	//	Dialoguseredit dialog(user, this);
+	//	if (dialog.exec() == QDialog::Accepted)
+	//		secUdp->cmd_SetUser(user, dialog.password());
+	}
+}
+
+void dialogUser::userDel(){
+	int reply;
+
+	if (ui->tableWidget->rowCount() == 1) {
+		reply = QMessageBox::question(this, "User Delete", "You cannot delete the last user.  ", QMessageBox::Ok);
+		return;
+	}
+
+	int index;
+	index = ui->tableWidget->currentRow();
+	qDebug() << "currentRow:" << ui->tableWidget->currentRow();
+
+	reply = QMessageBox::question(this, "User Delete", "Do you want delecte user:" + 
+		ui->tableWidget->item(index, 0)->text() + " ?",
+		QMessageBox::Yes | QMessageBox::No);
+
+	if (reply == QMessageBox::Yes) {
+		if (index >= 0) {
+			emit userDelSignal(ui->tableWidget->item(index, 0)->text());
+			done(btnDel);
+		}
+	}
+}
+
+void dialogUser::userQuit(){
+	emit userQuitSignal();
+	done(btnQuit);
 }

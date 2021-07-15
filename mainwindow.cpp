@@ -3,7 +3,6 @@
 #include "ui_mainwindow.h"
 #include "dialogLogin.h"
 #include "dialogDevice.h"
-#include "dialoguser.h"
 
 uint8_t mac[6];
 extern QList<Device *> deviceList;
@@ -43,6 +42,10 @@ MainWindow::MainWindow(QWidget *parent) :
     //model connection
 	connect(&secUdp, &SecureUdp::newDeviceIn, this, &MainWindow::updateTable);
 	connect(&secUdp, &SecureUdp::deviceResponse, this, &MainWindow::handleResponse);
+	//dialogUser connection
+	connect(&dialogUserObj, &dialogUser::userDelSignal, this, &MainWindow::handleUserDel);
+	connect(&dialogUserObj, &dialogUser::userQuitSignal, this, &MainWindow::handleUserQuit);
+	
 }
 
 MainWindow::~MainWindow()
@@ -124,23 +127,38 @@ void MainWindow::handleResponse(Device *dev, const QJsonObject &obj) {
 		QMessageBox msgbox;
 		msgbox.setText(obj["detail"].toString());
 		msgbox.exec();
+		return;
 	}
 	else if (obj["response"] == "SetNetwork") {
 		cleanTable();
 		scanning();
+		return;
 	}
 	else if (obj["response"] == "GetNetwork") {
 		dialogDevice dialog(&secUdp, this);
 		dialog.updateDevInfo(obj);
-
+		
 		int ret = dialog.exec();
 		if (ret == dialogDevice::btnUserEdit) { // edit users
 			secUdp.cmdSend("GetUsers", NULL);
 		}
+		return;
 	}
 	else if (obj["response"] == "GetUsers") {
-		dialogUser dialog(&secUdp, this);
-		dialog.updateUserinfo(obj);
-		dialog.exec();
+		qDebug() << "open dialogUser";
+
+		dialogUserObj.updateUserinfo(obj);
+		int ret = dialogUserObj.exec();
+		if (ret == dialogUser::btnQuit) {
+			//cleanTable();
+			//scanning();
+			dialogUserObj.close();
+		}
+
+		return;
+	}
+	else if (obj["response"] == "DelUser") {
+		secUdp.cmdSend("GetUsers", NULL);
 	}
 }
+

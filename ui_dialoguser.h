@@ -30,24 +30,25 @@ public:
     QPushButton *btnAdd;
     QPushButton *btnDel;
     QPushButton *btnEdit;
-    QPushButton *pushButton;
+    QPushButton *btnQuit;
     QLabel *label;
 
     void setupUi(QDialog *dialogUser)
     {
         if (dialogUser->objectName().isEmpty())
             dialogUser->setObjectName(QString::fromUtf8("dialogUser"));
-        dialogUser->resize(469, 408);
+        dialogUser->setWindowModality(Qt::NonModal);
+        dialogUser->resize(473, 408);
         tableWidget = new QTableWidget(dialogUser);
         if (tableWidget->columnCount() < 1)
             tableWidget->setColumnCount(1);
         QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
         tableWidget->setHorizontalHeaderItem(0, __qtablewidgetitem);
         tableWidget->setObjectName(QString::fromUtf8("tableWidget"));
-        tableWidget->setGeometry(QRect(20, 70, 311, 301));
+        tableWidget->setGeometry(QRect(20, 70, 321, 301));
         verticalLayoutWidget = new QWidget(dialogUser);
         verticalLayoutWidget->setObjectName(QString::fromUtf8("verticalLayoutWidget"));
-        verticalLayoutWidget->setGeometry(QRect(340, 120, 111, 201));
+        verticalLayoutWidget->setGeometry(QRect(350, 120, 111, 201));
         verticalLayout = new QVBoxLayout(verticalLayoutWidget);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         verticalLayout->setContentsMargins(0, 0, 0, 0);
@@ -74,12 +75,12 @@ public:
 
         verticalLayout->addWidget(btnEdit);
 
-        pushButton = new QPushButton(verticalLayoutWidget);
-        pushButton->setObjectName(QString::fromUtf8("pushButton"));
-        pushButton->setMinimumSize(QSize(0, 40));
-        pushButton->setFont(font);
+        btnQuit = new QPushButton(verticalLayoutWidget);
+        btnQuit->setObjectName(QString::fromUtf8("btnQuit"));
+        btnQuit->setMinimumSize(QSize(0, 40));
+        btnQuit->setFont(font);
 
-        verticalLayout->addWidget(pushButton);
+        verticalLayout->addWidget(btnQuit);
 
         label = new QLabel(dialogUser);
         label->setObjectName(QString::fromUtf8("label"));
@@ -103,7 +104,7 @@ public:
         btnAdd->setText(QCoreApplication::translate("dialogUser", "Add", nullptr));
         btnDel->setText(QCoreApplication::translate("dialogUser", "Delete", nullptr));
         btnEdit->setText(QCoreApplication::translate("dialogUser", "Edit", nullptr));
-        pushButton->setText(QCoreApplication::translate("dialogUser", "Exit", nullptr));
+        btnQuit->setText(QCoreApplication::translate("dialogUser", "Quit", nullptr));
         label->setText(QCoreApplication::translate("dialogUser", "User List", nullptr));
     } // retranslateUi
 

@@ -19,10 +19,12 @@ class dialogUser : public QDialog
     Q_OBJECT
 
 public:
-    explicit dialogUser(SecureUdp *s, QWidget *parent = nullptr);
+    explicit dialogUser(QWidget *parent = nullptr);
     ~dialogUser();
 
 	void updateUserinfo(const QJsonObject &obj);
+	static const int btnQuit = 2;
+	static const int btnDel = 3;
 
 private:
     Ui::dialogUser *ui;
@@ -31,6 +33,14 @@ private:
 
 private slots:
 	void handleResponse(Device *dev, const QJsonObject &obj);
+	void userEditOpen();
+	void userAddOpen();
+	void userDel();
+	void userQuit();
+
+signals:
+	void userQuitSignal();
+	void userDelSignal(QString username);
 };
 
 #endif // DIALOGUSER_H

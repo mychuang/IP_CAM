@@ -22,7 +22,7 @@ dialogDevice::dialogDevice(SecureUdp *s, QWidget *parent) :
 	//
 	connect(ui->btnOn, &QAbstractButton::clicked, this, &dialogDevice::dhcpOn);
 	connect(ui->btnOff, &QAbstractButton::clicked, this, &dialogDevice::dhcpOff);
-	connect(ui->btnExit, &QAbstractButton::clicked, this, &dialogDevice::reject);
+	connect(ui->btnExit, &QAbstractButton::clicked, this, &QDialog::reject);
 	connect(ui->btnUpdate, &QAbstractButton::clicked, this, &dialogDevice::setNetwork);
 	connect(ui->btnUpdate, &QAbstractButton::clicked, this, &dialogDevice::accept);
 	connect(ui->btnEdit, &QAbstractButton::clicked, this, &dialogDevice::userEditReturn);

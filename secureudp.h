@@ -25,6 +25,8 @@ public:
 	void setDevice(Device *dev); //update device from view
 	Device* getDevice() { return device; }
 	void cmdSend(const QString &cmd, const QJsonObject *data);
+	void cmdDelUser(QString username);
+	
 
 private:
     void generateAesKey();
@@ -45,7 +47,7 @@ private slots:
 signals:
 	void newDeviceIn(Device *dev);
 	void deviceResponse(Device *dev, const QJsonObject &obj);
-	void UserResponse(Device *dev, const QJsonObject &obj);
+	//void UserResponse(Device *dev, const QJsonObject &obj);
 };
 
 #endif // SECUREUDP_H
