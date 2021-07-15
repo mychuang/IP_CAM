@@ -1,6 +1,7 @@
 #include "dialoguser.h"
 #include "ui_dialoguser.h"
 #include <QMessageBox>
+#include "dialoguseredit.h"
 
 
 dialogUser::dialogUser(QWidget *parent) :
@@ -20,10 +21,6 @@ dialogUser::dialogUser(QWidget *parent) :
 dialogUser::~dialogUser()
 {
     delete ui;
-}
-
-void dialogUser::handleResponse(Device *dev, const QJsonObject &obj) {
-	qDebug() << "DialogUsers::handle_response" << obj;
 }
 
 void dialogUser::updateUserinfo(const QJsonObject &obj) {
@@ -53,9 +50,11 @@ void dialogUser::userEditOpen(){
 	index = ui->tableWidget->currentRow();
 	if (index >= 0) {
 		QString user = ui->tableWidget->item(index, 0)->text();
-	//	Dialoguseredit dialog(user, this);
-	//	if (dialog.exec() == QDialog::Accepted)
-	//		secUdp->cmd_SetUser(user, dialog.password());
+		dialogUserEdit dialog(user, this);
+		if (dialog.exec() == QDialog::Accepted) {
+			//		secUdp->cmd_SetUser(user, dialog.password());
+
+		}
 	}
 }
 

@@ -8,7 +8,6 @@
 #include <QString>
 #include <QUdpSocket>
 #include <QNetworkDatagram>
-#include "SecureUdp.h"
 
 namespace Ui {
 class dialogUser;
@@ -29,10 +28,8 @@ public:
 private:
     Ui::dialogUser *ui;
 
-	SecureUdp *secUdp;
 
 private slots:
-	void handleResponse(Device *dev, const QJsonObject &obj);
 	void userEditOpen();
 	void userAddOpen();
 	void userDel();
