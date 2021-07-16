@@ -2,7 +2,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "dialogLogin.h"
-#include "dialogDevice.h"
 
 uint8_t mac[6];
 extern QList<Device *> deviceList;
@@ -26,7 +25,8 @@ QString getMacAddress(uint8_t *mac) {
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow), secUdp(NULL)
+    ui(new Ui::MainWindow), secUdp(NULL),
+	dialogDeviceObj(this), dialogUserObj(this)
 {
     ui->setupUi(this);
 
@@ -44,9 +44,10 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(&secUdp, &SecureUdp::deviceResponse, this, &MainWindow::handleResponse);
 	//dialogUser connection
 	connect(&dialogUserObj, &dialogUser::userDelSignal, this, &MainWindow::handleUserDel);
-	connect(&dialogUserObj, &dialogUser::userQuitSignal, this, &MainWindow::handleUserQuit);
 	connect(&dialogUserObj, &dialogUser::userAddSignal, this, &MainWindow::handleUserAdd);
 	connect(&dialogUserObj, &dialogUser::userEditSignal, this, &MainWindow::handleUserEdit);
+	//dialogDevice connection
+	connect(&dialogDeviceObj, &dialogDevice::setNetworkSignal, this, &MainWindow::handleSetNetwork);
 }
 
 MainWindow::~MainWindow()
@@ -55,6 +56,7 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::initialUI() {
+	setWindowTitle("IP CAM v2.0");
 	ui->tableWidget->setRowCount(0);
 	ui->tableWidget->setColumnWidth(0, 180);
 	ui->tableWidget->setColumnWidth(1, 210);
@@ -136,10 +138,10 @@ void MainWindow::handleResponse(Device *dev, const QJsonObject &obj) {
 		return;
 	}
 	else if (obj["response"] == "GetNetwork") {
-		dialogDevice dialog(&secUdp, this);
-		dialog.updateDevInfo(obj);
+		Device *dev = secUdp.getDevice();
+		dialogDeviceObj.updateDevInfo(obj, dev);
 		
-		int ret = dialog.exec();
+		int ret = dialogDeviceObj.exec();
 		if (ret == dialogDevice::btnUserEdit) { // edit users
 			secUdp.cmdSend("GetUsers", NULL);
 		}
@@ -147,16 +149,19 @@ void MainWindow::handleResponse(Device *dev, const QJsonObject &obj) {
 	}
 	else if (obj["response"] == "GetUsers") {
 		dialogUserObj.updateUserinfo(obj);
-		int ret = dialogUserObj.exec();
-		if (ret == dialogUser::btnQuit) {
-			dialogUserObj.close();
-		}
+		dialogUserObj.exec();
 		return;
 	}
 	else if (obj["response"] == "DelUser" ||
 		     obj["response"] == "AddUser" ||
 		     obj["response"] == "SetUser") {
 		secUdp.cmdSend("GetUsers", NULL);
+		return;
+	}
+	else {
+		QMessageBox msgbox;
+		msgbox.setText("Unknow Json Obj");
+		msgbox.exec();
 		return;
 	}
 }

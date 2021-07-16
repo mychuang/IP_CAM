@@ -52,7 +52,6 @@ void SecureUdp::prob() {
 	msg.size = 0;
 
 	udpSender.writeDatagram((const char *)&msg, offsetof(struct Message, data) + msg.size, groupAddress, MCAST_PORT);
-	udpSender.waitForReadyRead(30);
 }
 
 void SecureUdp::processPendingDatagrams() {
@@ -260,16 +259,11 @@ void SecureUdp::handleCipherdata(Device *dev, struct Message *msg) {
 	}
 
 	QJsonObject obj = jsonDoc.object();
+	//qDebug() << obj;
 	qDebug() << obj["response"];
-	//if (obj["response"] == "GetNetwork" || 
-	//	obj["response"] == "SetNetwork" || 
-	//	obj["response"] == "error" ||
-	//	obj["response"] == "GetUsers") {
-		emit deviceResponse(dev, obj);
-	//}
-	//else if(obj["response"] == "GetUsers"){
-	//	emit UserResponse(dev, obj);
-	//}
+	
+	emit deviceResponse(dev, obj);
+
 }
 
 void SecureUdp::setDevice(Device *dev) {

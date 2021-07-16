@@ -3,30 +3,20 @@
 #include "ui_dialogdevice.h"
 #include <QJsonArray>
 
-dialogDevice::dialogDevice(SecureUdp *s, QWidget *parent) :
+dialogDevice::dialogDevice(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::dialogDevice), secUdp(s)
+    ui(new Ui::dialogDevice)
 {
     ui->setupUi(this);
 
-	QString mac;
-	Device *dev = s->getDevice();
-	mac.sprintf("%02x:%02x:%02x:%02x:%02x:%02x",
-		dev->mac[0], dev->mac[1], dev->mac[2], dev->mac[3], dev->mac[4], dev->mac[5]);
-	ui->labelMAC->setText(mac);
-	ui->editName->setText(dev->name);
-	ui->labelModel->setText(QString(dev->model));
-	ui->labUser->setText("\"" + dev->username + "\"  Login");
-	ui->labUser->setStyleSheet("color: rgb(89, 95, 207)");
-
-	//
 	connect(ui->btnOn, &QAbstractButton::clicked, this, &dialogDevice::dhcpOn);
 	connect(ui->btnOff, &QAbstractButton::clicked, this, &dialogDevice::dhcpOff);
-	connect(ui->btnExit, &QAbstractButton::clicked, this, &QDialog::reject);
+
+	connect(ui->btnExit, &QAbstractButton::clicked, this, &dialogDevice::dialogQuit);
+
 	connect(ui->btnUpdate, &QAbstractButton::clicked, this, &dialogDevice::setNetwork);
 	connect(ui->btnUpdate, &QAbstractButton::clicked, this, &dialogDevice::accept);
 	connect(ui->btnEdit, &QAbstractButton::clicked, this, &dialogDevice::userEditReturn);
-
 }
 
 dialogDevice::~dialogDevice()
@@ -34,10 +24,11 @@ dialogDevice::~dialogDevice()
     delete ui;
 }
 
-void dialogDevice::updateDevInfo(const QJsonObject &obj) {
+void dialogDevice::updateDevInfo(const QJsonObject &obj, Device *dev) {
 	qDebug() << __func__;
 	QString dns;
 	QJsonArray array = obj["dns"].toArray();
+	qDebug() << obj;
 
 	if (array.size() > 0) {
 		dns = array[0].toString();
@@ -65,6 +56,16 @@ void dialogDevice::updateDevInfo(const QJsonObject &obj) {
 		ui->editDNS->setDisabled(false);
 
 	}
+
+	//set other UI
+	QString mac;
+	mac.sprintf("%02x:%02x:%02x:%02x:%02x:%02x",
+		dev->mac[0], dev->mac[1], dev->mac[2], dev->mac[3], dev->mac[4], dev->mac[5]);
+	ui->labelMAC->setText(mac);
+    ui->editName->setText(dev->name);
+	ui->labelModel->setText(QString(dev->model));
+	ui->labUser->setText("\"" + dev->username + "\"  Login");
+	ui->labUser->setStyleSheet("color: rgb(89, 95, 207)");
 }
 
 void dialogDevice::dhcpOn(){
@@ -89,7 +90,9 @@ void dialogDevice::setNetwork() {
 	qDebug() << __func__;
 	QJsonObject obj;
 	setDevInfo(obj);
-	secUdp->cmdSend("SetNetwork", &obj);
+	
+	emit setNetworkSignal(&obj);
+	done(btnOk);
 }
 
 void dialogDevice::setDevInfo(QJsonObject &obj) {

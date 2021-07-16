@@ -15,15 +15,16 @@ class dialogDevice : public QDialog
     Q_OBJECT
 
 public:
-    explicit dialogDevice(SecureUdp *s, QWidget *parent = nullptr);
+    explicit dialogDevice(QWidget *parent = nullptr);
     ~dialogDevice();
 
-	void updateDevInfo(const QJsonObject &obj);
+	void updateDevInfo(const QJsonObject &obj, Device *dev);
 	static const int btnUserEdit = 2;
+	static const int btnOk = 3;
+
 private:
     Ui::dialogDevice *ui;
 
-	SecureUdp *secUdp;
 	void setDevInfo(QJsonObject &obj);
 
 private slots:
@@ -31,6 +32,10 @@ private slots:
 	void dhcpOff();
 	void setNetwork();
 	void userEditReturn();
+	void dialogQuit() { done(btnOk); };
+
+signals:
+	void setNetworkSignal(QJsonObject *obj);
 };
 
 #endif // DIALOGDEVICE_H

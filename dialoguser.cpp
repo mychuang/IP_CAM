@@ -42,7 +42,7 @@ void dialogUser::userAddOpen(){
 
 	if (dialog.exec() == QDialog::Accepted) {
 		emit userAddSignal(dialog.username(), dialog.password(), dialog.authority());
-		dialog.done(3);
+		dialog.done(btnInt);
 		done(btnInt);
 	}
 
@@ -57,7 +57,7 @@ void dialogUser::userEditOpen(){
 		dialogUserEdit dialog(user, this);
 		if (dialog.exec() == QDialog::Accepted) {
 			emit userEditSignal(user, dialog.password(), dialog.authority());
-			dialog.done(3);
+			dialog.done(btnInt);
 			done(btnInt);
 		}
 	}
@@ -88,6 +88,6 @@ void dialogUser::userDel(){
 }
 
 void dialogUser::userQuit(){
-	emit userQuitSignal();
+	//emit userQuitSignal();
 	done(btnQuit);
 }
