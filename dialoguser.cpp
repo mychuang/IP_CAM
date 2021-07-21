@@ -23,6 +23,7 @@ dialogUser::~dialogUser()
 }
 
 void dialogUser::updateUserinfo(const QJsonObject &obj) {
+	qDebug() << __func__;
 	ui->tableWidget->setRowCount(0);
 	QJsonArray array = obj["users"].toArray();
 
@@ -32,6 +33,7 @@ void dialogUser::updateUserinfo(const QJsonObject &obj) {
 		ui->tableWidget->setRowCount(row + 1);
 		ui->tableWidget->setItem(row, 0, new QTableWidgetItem(user["username"].toString()));
 		QString auth = user["userauth"].toString();
+		qDebug() << auth;
 		if (QString::compare(auth, "0") == 0) {
 			ui->tableWidget->setItem(row, 1, new QTableWidgetItem("Admin"));
 		}
@@ -47,7 +49,6 @@ void dialogUser::updateUserinfo(const QJsonObject &obj) {
 	}
 	ui->tableWidget->setColumnWidth(0, 130);
 	ui->tableWidget->setColumnWidth(1, 130);
-	ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
 }
 
 void dialogUser::userAddOpen(){

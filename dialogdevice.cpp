@@ -68,14 +68,15 @@ void dialogDevice::updateDevInfo(const QJsonObject &obj, Device *dev) {
 	//set User Label
 	QString nowAuth = obj["nowauth"].toString();
 	QString nowUser = obj["nowuser"].toString();
+
 	if(QString::compare(nowAuth, "0") == 0) {
-		ui->labUser->setText("Authority Admin: " + nowUser + " Login");
+		ui->labUser->setText("\"" + nowUser + "\" Login (Admin)");
 	}
 	else if (QString::compare(nowAuth, "1") == 0) {
-		ui->labUser->setText("Authority Operator: " + nowUser + " Login");
+		ui->labUser->setText("\"" + nowUser + "\" Login (Operator)");
 	}
 	else if (QString::compare(nowAuth, "2") == 0) {
-		ui->labUser->setText("Authority Viewer: " + nowUser + " Login");
+		ui->labUser->setText("\"" + nowUser + "\" Login (Viewer)");
 	}
 	else {
 		ui->labUser->setText("\"" + dev->username + "\"  Login");

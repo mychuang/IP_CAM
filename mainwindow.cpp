@@ -30,6 +30,10 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+#if QThreadEnabled == 1
+	secUdp.start();
+#endif
+
     //UI
 	initialUI();
     //get local MAC
@@ -52,6 +56,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+#if QThreadEnabled == 1
+	secUdp.stop();
+	secUdp.wait();
+#endif
     delete ui;
 }
 

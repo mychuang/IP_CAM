@@ -4,12 +4,18 @@
 extern uint8_t mac[6]; // local mac address
 QList<Device *> deviceList;
 
+#if QThreadEnabled
+SecureUdp::SecureUdp(QObject *parent) : QThread(parent), m_done(false)
+{
+	generateAesKey();
+	groupAddress = QHostAddress(QStringLiteral(MCAST_ADDR));
+}
+#else
 SecureUdp::SecureUdp(QObject *parent) : QObject(parent)
 {
 	generateAesKey();
 	groupAddress = QHostAddress(QStringLiteral(MCAST_ADDR));
 
-	//reading data
 	bool bindResult = udpReceiver.bind(MCAST_PORT + 1, QUdpSocket::ShareAddress);
 	if (!bindResult) {
 		qDebug() << "error bind";
@@ -17,9 +23,9 @@ SecureUdp::SecureUdp(QObject *parent) : QObject(parent)
 	else {
 		qDebug() << "binding in" << MCAST_PORT + 1;
 	}
-
 	connect(&udpReceiver, &QUdpSocket::readyRead, this, &SecureUdp::processPendingDatagrams);
 }
+#endif
 
 void SecureUdp::generateAesKey(){
     qDebug() << __func__;
@@ -53,6 +59,70 @@ void SecureUdp::prob() {
 
 	udpSender.writeDatagram((const char *)&msg, offsetof(struct Message, data) + msg.size, groupAddress, MCAST_PORT);
 }
+
+#if QThreadEnabled == 1
+void SecureUdp::run() {
+	struct Message msg;
+	bool bindResult = udpReceiver.bind(MCAST_PORT + 1, QUdpSocket::ShareAddress);
+	if (!bindResult) {
+		qDebug() << "error bind";
+	}
+	else {
+		qDebug() << "binding in" << MCAST_PORT + 1;
+	}
+
+	while (!m_done) {
+		if (!udpReceiver.waitForReadyRead(30))
+			continue;
+		memset(&msg, 0, sizeof(msg));
+		udpReceiver.readDatagram((char *)&msg, sizeof(msg));
+		
+		if (msg.magic != MCAST_MSG_MAGIC)
+			continue;
+
+		if (memcmp(msg.to, mac, 6)) {
+			qDebug() << "I'm not receiver";
+			continue;
+		}
+
+		qDebug("type: %02x", msg.type);
+		switch (msg.type) {
+		case MCAST_MSG_PROBE_RESPONSE: {
+			qDebug() << "run: handle Response";
+			handleProbeResponse(&msg);
+			break;
+		}
+		case MCAST_MSG_GETPUBKEY_RESPONSE: {
+			qDebug() << "run: get PUBKEY";
+			Device *dev = findDevice(msg.from);
+			if (dev) {
+				dev->pKey = loadPUBLICKeyFromString((const char *)msg.data);
+				setAesKey(dev);
+			}
+			break;
+		}
+		case MCAST_MSG_SETAESKEY_ACK: {
+			qDebug() << "run: AES ok!";
+			Device *dev = findDevice(msg.from);
+			if (dev) {
+				dev->aes_ready = true;
+			}
+			break;
+		}
+		case MCAST_MSG_CIPHERDATA: {
+			qDebug() << "run: get CIPHERDATA";
+			Device *dev = findDevice(msg.from);
+			if (dev) {
+				handleCipherdata(dev, &msg);
+			}
+			break;
+		}
+		default:
+			qDebug() << "%s: unhanlded message type" << msg.type;
+		}
+	}
+}
+#endif
 
 void SecureUdp::processPendingDatagrams() {
 

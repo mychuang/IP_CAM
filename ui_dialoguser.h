@@ -48,6 +48,7 @@ public:
         tableWidget->setHorizontalHeaderItem(1, __qtablewidgetitem1);
         tableWidget->setObjectName(QString::fromUtf8("tableWidget"));
         tableWidget->setGeometry(QRect(20, 70, 321, 301));
+        tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
         verticalLayoutWidget = new QWidget(dialogUser);
         verticalLayoutWidget->setObjectName(QString::fromUtf8("verticalLayoutWidget"));
         verticalLayoutWidget->setGeometry(QRect(350, 120, 111, 201));
