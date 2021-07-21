@@ -30,6 +30,11 @@
      <string>Name</string>
     </property>
    </column>
+   <column>
+    <property name="text">
+     <string>Authority</string>
+    </property>
+   </column>
   </widget>
   <widget class="QWidget" name="verticalLayoutWidget">
    <property name="geometry">

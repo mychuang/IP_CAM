@@ -1,16 +1,18 @@
 #include "dialoguseredit.h"
 #include "ui_dialoguseredit.h"
 #include <QAbstractButton>
+#include <QDebug>
 
 dialogUserEdit::dialogUserEdit(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::dialogUserEdit)
 {
     ui->setupUi(this);
+
 	ui->btnAdmin->setChecked(true);
 }
 
-dialogUserEdit::dialogUserEdit(const QString &user, QWidget *parent) :
+dialogUserEdit::dialogUserEdit(const QString &user, const QString &auth, QWidget *parent):
 	QDialog(parent),
 	ui(new Ui::dialogUserEdit) 
 {
@@ -18,8 +20,15 @@ dialogUserEdit::dialogUserEdit(const QString &user, QWidget *parent) :
 	ui->editUser->setReadOnly(true);
 	ui->editUser->setText(user);
 
-	ui->btnAdmin->setChecked(true);
-
+	if (QString::compare(auth, "Admin") == 0) {
+		ui->btnAdmin->setChecked(true);
+	}
+	else if (QString::compare(auth, "Operator") == 0) {
+		ui->btnOperator->setChecked(true);
+	}
+	else {
+		ui->btnView->setChecked(true);
+	}
 }
 
 dialogUserEdit::~dialogUserEdit()

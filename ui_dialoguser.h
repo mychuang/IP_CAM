@@ -40,10 +40,12 @@ public:
         dialogUser->setWindowModality(Qt::NonModal);
         dialogUser->resize(473, 408);
         tableWidget = new QTableWidget(dialogUser);
-        if (tableWidget->columnCount() < 1)
-            tableWidget->setColumnCount(1);
+        if (tableWidget->columnCount() < 2)
+            tableWidget->setColumnCount(2);
         QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
         tableWidget->setHorizontalHeaderItem(0, __qtablewidgetitem);
+        QTableWidgetItem *__qtablewidgetitem1 = new QTableWidgetItem();
+        tableWidget->setHorizontalHeaderItem(1, __qtablewidgetitem1);
         tableWidget->setObjectName(QString::fromUtf8("tableWidget"));
         tableWidget->setGeometry(QRect(20, 70, 321, 301));
         verticalLayoutWidget = new QWidget(dialogUser);
@@ -101,6 +103,8 @@ public:
         dialogUser->setWindowTitle(QCoreApplication::translate("dialogUser", "Dialog", nullptr));
         QTableWidgetItem *___qtablewidgetitem = tableWidget->horizontalHeaderItem(0);
         ___qtablewidgetitem->setText(QCoreApplication::translate("dialogUser", "Name", nullptr));
+        QTableWidgetItem *___qtablewidgetitem1 = tableWidget->horizontalHeaderItem(1);
+        ___qtablewidgetitem1->setText(QCoreApplication::translate("dialogUser", "Authority", nullptr));
         btnAdd->setText(QCoreApplication::translate("dialogUser", "Add", nullptr));
         btnDel->setText(QCoreApplication::translate("dialogUser", "Delete", nullptr));
         btnEdit->setText(QCoreApplication::translate("dialogUser", "Edit", nullptr));

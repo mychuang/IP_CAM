@@ -13,7 +13,7 @@ class dialogUserEdit : public QDialog
 
 public:
     explicit dialogUserEdit(QWidget *parent = nullptr);
-	dialogUserEdit(const QString &user, QWidget *parent = nullptr);
+	dialogUserEdit(const QString &user, const QString &auth, QWidget *parent = nullptr);
     ~dialogUserEdit();
 
 	QString username();

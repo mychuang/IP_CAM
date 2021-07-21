@@ -139,6 +139,7 @@ void SecureUdp::handleProbeResponse(Message *msg) {
 
 	emit newDeviceIn(dev);
 	requestPublicKey(msg->from);
+
 }
 
 Device* SecureUdp::findDevice(uint8_t *mac) {
@@ -231,9 +232,10 @@ void SecureUdp::cmdSend(const QString &cmd, const QJsonObject *data) {
 		qDebug() << "json message:" << secureCmd;
 
 		unsigned char msgDataIn[1024];
-		memcpy(msgDataIn, secureCmd.constData(), secureCmd.size() + 1);
+		memset(msgDataIn, 0, secureCmd.size());
+		memcpy(msgDataIn, secureCmd.constData(), secureCmd.size());
 		// including nul terminate, must be times of 16 bytes (AES key length)
-		msg.size = size_with_padding(secureCmd.size() + 1); 
+		msg.size = size_with_padding(secureCmd.size()); 
 
 		AES_cbc_encrypt(msgDataIn, msg.data, msg.size, &enc_key, device->iv, AES_ENCRYPT);
 		udpSender.writeDatagram((const char *)&msg, offsetof(struct Message, data) + msg.size, groupAddress, MCAST_PORT);
@@ -261,6 +263,9 @@ void SecureUdp::handleCipherdata(Device *dev, struct Message *msg) {
 	QJsonObject obj = jsonDoc.object();
 	//qDebug() << obj;
 	qDebug() << obj["response"];
+	//qDebug() << obj["nowauth"];
+	//qDebug() << obj["nowuser"];
+	qDebug() << obj["users"];
 	
 	emit deviceResponse(dev, obj);
 

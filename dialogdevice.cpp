@@ -64,7 +64,22 @@ void dialogDevice::updateDevInfo(const QJsonObject &obj, Device *dev) {
 	ui->labelMAC->setText(mac);
     ui->editName->setText(dev->name);
 	ui->labelModel->setText(QString(dev->model));
-	ui->labUser->setText("\"" + dev->username + "\"  Login");
+
+	//set User Label
+	QString nowAuth = obj["nowauth"].toString();
+	QString nowUser = obj["nowuser"].toString();
+	if(QString::compare(nowAuth, "0") == 0) {
+		ui->labUser->setText("Authority Admin: " + nowUser + " Login");
+	}
+	else if (QString::compare(nowAuth, "1") == 0) {
+		ui->labUser->setText("Authority Operator: " + nowUser + " Login");
+	}
+	else if (QString::compare(nowAuth, "2") == 0) {
+		ui->labUser->setText("Authority Viewer: " + nowUser + " Login");
+	}
+	else {
+		ui->labUser->setText("\"" + dev->username + "\"  Login");
+	}
 	ui->labUser->setStyleSheet("color: rgb(89, 95, 207)");
 }
 

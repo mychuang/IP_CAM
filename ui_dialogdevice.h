@@ -184,7 +184,7 @@ public:
 
         labUser = new QLabel(dialogDevice);
         labUser->setObjectName(QString::fromUtf8("labUser"));
-        labUser->setGeometry(QRect(50, 10, 141, 41));
+        labUser->setGeometry(QRect(50, 10, 411, 41));
         labUser->setFont(font1);
         horizontalLayoutWidget_2 = new QWidget(dialogDevice);
         horizontalLayoutWidget_2->setObjectName(QString::fromUtf8("horizontalLayoutWidget_2"));
