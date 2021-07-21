@@ -8,7 +8,7 @@ dialogDevice::dialogDevice(QWidget *parent) :
     ui(new Ui::dialogDevice)
 {
     ui->setupUi(this);
-
+	setWindowTitle("Device Information");
 	connect(ui->btnOn, &QAbstractButton::clicked, this, &dialogDevice::dhcpOn);
 	connect(ui->btnOff, &QAbstractButton::clicked, this, &dialogDevice::dhcpOff);
 

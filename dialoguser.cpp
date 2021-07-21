@@ -8,6 +8,7 @@ dialogUser::dialogUser(QWidget *parent) :
     ui(new Ui::dialogUser)
 {
     ui->setupUi(this);
+	setWindowTitle("User List");
 	ui->tableWidget->setColumnWidth(0, 300);
 
 	connect(ui->btnAdd, &QPushButton::clicked, this, &dialogUser::userAddOpen);
@@ -47,8 +48,8 @@ void dialogUser::updateUserinfo(const QJsonObject &obj) {
 			ui->tableWidget->setItem(row, 1, new QTableWidgetItem("Null"));
 		}
 	}
-	ui->tableWidget->setColumnWidth(0, 130);
-	ui->tableWidget->setColumnWidth(1, 130);
+	ui->tableWidget->setColumnWidth(0, 135);
+	ui->tableWidget->setColumnWidth(1, 135);
 }
 
 void dialogUser::userAddOpen(){

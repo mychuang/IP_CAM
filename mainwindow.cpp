@@ -64,7 +64,7 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::initialUI() {
-	setWindowTitle("IP CAM v2.0");
+	setWindowTitle("Lumens Device Search v2.1");
 	ui->tableWidget->setRowCount(0);
 	ui->tableWidget->setColumnWidth(0, 180);
 	ui->tableWidget->setColumnWidth(1, 210);

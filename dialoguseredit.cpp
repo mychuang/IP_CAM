@@ -8,6 +8,7 @@ dialogUserEdit::dialogUserEdit(QWidget *parent) :
     ui(new Ui::dialogUserEdit)
 {
     ui->setupUi(this);
+	setWindowTitle("User Edit");
 
 	ui->btnAdmin->setChecked(true);
 }

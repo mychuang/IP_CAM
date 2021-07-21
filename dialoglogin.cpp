@@ -6,7 +6,7 @@ dialogLogin::dialogLogin(QString user, QString pass, QWidget *parent) :
     ui(new Ui::dialogLogin)
 {
     ui->setupUi(this);
-	
+	setWindowTitle("Login");
 	ui->userEdit->setText(user);
 	ui->pwdEdit->setText(pass);
 }
