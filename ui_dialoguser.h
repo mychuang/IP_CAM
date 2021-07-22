@@ -87,7 +87,7 @@ public:
 
         label = new QLabel(dialogUser);
         label->setObjectName(QString::fromUtf8("label"));
-        label->setGeometry(QRect(30, 20, 131, 31));
+        label->setGeometry(QRect(30, 20, 231, 31));
         QFont font1;
         font1.setPointSize(14);
         font1.setBold(true);
@@ -110,7 +110,7 @@ public:
         btnDel->setText(QCoreApplication::translate("dialogUser", "Delete", nullptr));
         btnEdit->setText(QCoreApplication::translate("dialogUser", "Edit", nullptr));
         btnQuit->setText(QCoreApplication::translate("dialogUser", "Quit", nullptr));
-        label->setText(QCoreApplication::translate("dialogUser", "User List", nullptr));
+        label->setText(QCoreApplication::translate("dialogUser", "User List Information", nullptr));
     } // retranslateUi
 
 };

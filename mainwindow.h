@@ -32,14 +32,11 @@ private slots:
 	void updateTable(Device *dev);
 	void signInOpen(int row, int column);
 	void handleResponse(Device *dev, const QJsonObject &obj);
+	void waitAnimation(bool running);
 	//hangle dialogUser
-	void handleUserAdd(QString username, QString password, QString authority) { 
-		secUdp.cmdAddUser(username, password, authority);
-	};
-	void handleUserEdit(QString username, QString password, QString authority) { 
-		secUdp.cmdSetUser(username, password, authority);
-	};
-	void handleUserDel(QString username) { secUdp.cmdDelUser(username);};
+	void handleUserAdd(QString username, QString password, QString authority);
+	void handleUserEdit(QString username, QString password, QString authority);
+	void handleUserDel(QString username);
 	void handleSetNetwork(QJsonObject *obj) { secUdp.cmdSend("SetNetwork", obj); };
 };
 

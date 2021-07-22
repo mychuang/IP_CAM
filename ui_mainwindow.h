@@ -37,6 +37,7 @@ public:
     QLineEdit *userNameEdit;
     QLabel *passwordLab;
     QLineEdit *passwordEdit;
+    QLabel *labFig;
     QTableWidget *tableWidget;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
@@ -51,7 +52,7 @@ public:
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         horizontalLayoutWidget = new QWidget(centralWidget);
         horizontalLayoutWidget->setObjectName(QString::fromUtf8("horizontalLayoutWidget"));
-        horizontalLayoutWidget->setGeometry(QRect(10, 10, 821, 80));
+        horizontalLayoutWidget->setGeometry(QRect(10, 10, 821, 91));
         horizontalLayout = new QHBoxLayout(horizontalLayoutWidget);
         horizontalLayout->setSpacing(6);
         horizontalLayout->setContentsMargins(11, 11, 11, 11);
@@ -104,6 +105,12 @@ public:
 
         horizontalLayout->addWidget(passwordEdit);
 
+        labFig = new QLabel(horizontalLayoutWidget);
+        labFig->setObjectName(QString::fromUtf8("labFig"));
+        labFig->setMinimumSize(QSize(70, 50));
+
+        horizontalLayout->addWidget(labFig);
+
         tableWidget = new QTableWidget(centralWidget);
         if (tableWidget->columnCount() < 4)
             tableWidget->setColumnCount(4);
@@ -116,7 +123,7 @@ public:
         QTableWidgetItem *__qtablewidgetitem3 = new QTableWidgetItem();
         tableWidget->setHorizontalHeaderItem(3, __qtablewidgetitem3);
         tableWidget->setObjectName(QString::fromUtf8("tableWidget"));
-        tableWidget->setGeometry(QRect(10, 110, 821, 321));
+        tableWidget->setGeometry(QRect(10, 120, 821, 311));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
@@ -141,6 +148,7 @@ public:
         cleanBtn->setText(QCoreApplication::translate("MainWindow", "Clean", nullptr));
         userNameLab->setText(QCoreApplication::translate("MainWindow", "Default UserName", nullptr));
         passwordLab->setText(QCoreApplication::translate("MainWindow", "Password", nullptr));
+        labFig->setText(QString());
         QTableWidgetItem *___qtablewidgetitem = tableWidget->horizontalHeaderItem(0);
         ___qtablewidgetitem->setText(QCoreApplication::translate("MainWindow", "Mac", nullptr));
         QTableWidgetItem *___qtablewidgetitem1 = tableWidget->horizontalHeaderItem(1);

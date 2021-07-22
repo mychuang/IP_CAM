@@ -1,7 +1,11 @@
 #include <QMessageBox>
+#include <QMovie>
+#include <QSize>
+#include <QDir>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "dialogLogin.h"
+
 
 uint8_t mac[6];
 extern QList<Device *> deviceList;
@@ -81,6 +85,27 @@ void MainWindow::initialUI() {
 		"color: rgb(0, 0, 0)");
 }
 
+void MainWindow::waitAnimation(bool running) {
+
+	QString imageFile = NULL;
+	imageFile = QDir::currentPath() + "/Image/loading-noise.gif";
+
+	QSize si(ui->labFig->width(), ui->labFig->height());
+	QMovie *m_movie = new QMovie(imageFile);
+	m_movie->setScaledSize(si);
+	if (running == true) {
+		m_movie->start();
+		ui->labFig->setMovie(m_movie);
+	}
+	else {
+		ui->labFig->setMovie(NULL);
+	}
+
+	ui->tableWidget->blockSignals(true);
+	ui->tableWidget->setAlternatingRowColors(true);
+	ui->tableWidget->setStyleSheet("alternate-background-color: #8080ab; background: white; color: #21d9c9; ");
+}
+
 void MainWindow::scanning() {
 	ui->probBtn->setStyleSheet("background-color: rgb(179, 179, 179);""color: rgb(255, 255, 255)");
 	ui->probBtn->setEnabled(false);
@@ -114,6 +139,10 @@ void MainWindow::updateTable(Device *dev)
 	ui->tableWidget->setItem(row, 1, new QTableWidgetItem(dev->model));
 	ui->tableWidget->setItem(row, 2, new QTableWidgetItem(dev->name));
 	ui->tableWidget->setItem(row, 3, new QTableWidgetItem(dev->ip));
+
+	//ui setting
+	ui->tableWidget->setAlternatingRowColors(true);
+	ui->tableWidget->setStyleSheet("alternate-background-color: #e1eef0; background: white; color: #530354; ");
 }
 
 void MainWindow::signInOpen(int row, int column){
@@ -164,6 +193,10 @@ void MainWindow::handleResponse(Device *dev, const QJsonObject &obj) {
 		     obj["response"] == "AddUser" ||
 		     obj["response"] == "SetUser") {
 		secUdp.cmdSend("GetUsers", NULL);
+		waitAnimation(false);
+		ui->tableWidget->blockSignals(false);
+		ui->tableWidget->setAlternatingRowColors(true);
+		ui->tableWidget->setStyleSheet("alternate-background-color: #dcf2d8; background: white; color: #152ae8; ");
 		return;
 	}
 	else {
@@ -174,3 +207,16 @@ void MainWindow::handleResponse(Device *dev, const QJsonObject &obj) {
 	}
 }
 
+void MainWindow::handleUserAdd(QString username, QString password, QString authority) {
+	secUdp.cmdAddUser(username, password, authority);
+	waitAnimation(true);
+};
+
+void MainWindow::handleUserEdit(QString username, QString password, QString authority) {
+	secUdp.cmdSetUser(username, password, authority);
+	waitAnimation(true);
+};
+void MainWindow::handleUserDel(QString username) {
+	secUdp.cmdDelUser(username);
+	waitAnimation(true);
+};
