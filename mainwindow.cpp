@@ -68,7 +68,7 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::initialUI() {
-	setWindowTitle("Lumens Device Search v2.1");
+	setWindowTitle("Lumens Device Search v2.2");
 	ui->tableWidget->setRowCount(0);
 	ui->tableWidget->setColumnWidth(0, 180);
 	ui->tableWidget->setColumnWidth(1, 210);
@@ -92,6 +92,7 @@ void MainWindow::waitAnimation(bool running) {
 
 	QSize si(ui->labFig->width(), ui->labFig->height());
 	QMovie *m_movie = new QMovie(imageFile);
+
 	m_movie->setScaledSize(si);
 	if (running == true) {
 		m_movie->start();
