@@ -7,20 +7,21 @@
 #include "dialogLogin.h"
 
 
+
 uint8_t mac[6];
 extern QList<Device *> deviceList;
 QString getMacAddress(uint8_t *mac) {
 	QString from;
 
 	foreach(QNetworkInterface netInterface, QNetworkInterface::allInterfaces()) {
-		qDebug() << netInterface.addressEntries().at(1).ip();
+		
 		if (!(netInterface.flags() & QNetworkInterface::IsLoopBack)) {
 			QString strMac = netInterface.hardwareAddress();
 
 			for (int i = 0; i < 6; i++) {
 				mac[i] = (uint8_t)(strMac.mid(i * 3, 2).toInt(NULL, 16));
 			}
-			qDebug() << strMac;
+			if (SHOWDEBUG) qDebug() << strMac;
 			return strMac;
 		}
 	}
@@ -68,7 +69,7 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::initialUI() {
-	setWindowTitle("Lumens Device Search v2.2");
+	setWindowTitle("Lumens Device Search v2.3");
 	ui->tableWidget->setRowCount(0);
 	ui->tableWidget->setColumnWidth(0, 180);
 	ui->tableWidget->setColumnWidth(1, 210);
@@ -114,7 +115,7 @@ void MainWindow::scanning() {
 }
 
 void MainWindow::cleanTable() {
-	qDebug() << __func__;
+	if (SHOWDEBUG) qDebug() << __func__;
 	ui->tableWidget->clear();
 	ui->tableWidget->setRowCount(0);
 	secUdp.cleanDeviceList();
@@ -128,7 +129,7 @@ void MainWindow::cleanTable() {
 
 void MainWindow::updateTable(Device *dev)
 {
-	qDebug() << __func__;
+	if (SHOWDEBUG) qDebug() << __func__;
 	int row = ui->tableWidget->rowCount();
 
 	QString from;
@@ -147,7 +148,7 @@ void MainWindow::updateTable(Device *dev)
 }
 
 void MainWindow::signInOpen(int row, int column){
-	qDebug() << __func__;
+	if (SHOWDEBUG) qDebug() << __func__;
 
 	Device *dev = deviceList[row];
 
@@ -176,7 +177,7 @@ void MainWindow::signInOpen(int row, int column){
 }
 
 void MainWindow::handleResponse(Device *dev, const QJsonObject &obj) {
-	qDebug() << "MainWindow::handleResponse";
+	if (SHOWDEBUG) qDebug() << "MainWindow::handleResponse";
 
 	if (obj["response"] == "error") {
 		QMessageBox msgbox;

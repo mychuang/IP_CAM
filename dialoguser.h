@@ -8,6 +8,7 @@
 #include <QString>
 #include <QUdpSocket>
 #include <QNetworkDatagram>
+#include "secureUdp.h"
 
 namespace Ui {
 class dialogUser;

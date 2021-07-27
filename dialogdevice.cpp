@@ -26,10 +26,10 @@ dialogDevice::~dialogDevice()
 }
 
 void dialogDevice::updateDevInfo(const QJsonObject &obj, Device *dev) {
-	qDebug() << __func__;
+	if (SHOWDEBUG) qDebug() << __func__;
 	QString dns;
 	QJsonArray array = obj["dns"].toArray();
-	qDebug() << obj;
+	if (SHOWDEBUG) qDebug() << obj;
 
 	if (array.size() > 0) {
 		dns = array[0].toString();
@@ -86,7 +86,7 @@ void dialogDevice::updateDevInfo(const QJsonObject &obj, Device *dev) {
 }
 
 void dialogDevice::dhcpOn(){
-	qDebug() << __func__;
+	if (SHOWDEBUG) qDebug() << __func__;
 
 	ui->editIP->setDisabled(true);
 	ui->editNetmask->setDisabled(true);
@@ -95,7 +95,7 @@ void dialogDevice::dhcpOn(){
 }
 
 void dialogDevice::dhcpOff(){
-	qDebug() << __func__;
+	if (SHOWDEBUG) qDebug() << __func__;
 
 	ui->editIP->setDisabled(false);
 	ui->editNetmask->setDisabled(false);
@@ -104,7 +104,7 @@ void dialogDevice::dhcpOff(){
 }
 
 void dialogDevice::setNetwork() {
-	qDebug() << __func__;
+	if (SHOWDEBUG) qDebug() << __func__;
 	QJsonObject obj;
 
 	if (setDevInfo(obj) == true) {
@@ -123,7 +123,7 @@ bool dialogDevice::setDevInfo(QJsonObject &obj) {
 
 	if (v.validate(ui->editName->text(), pos) == QValidator::Invalid ||
 		v.validate(ui->editName->text(), pos) == QValidator::Intermediate) {
-		qDebug() << "name error";
+		if (SHOWDEBUG) qDebug() << "name error";
 		errInfo.append("Name");
 	}
 	else {
@@ -133,7 +133,7 @@ bool dialogDevice::setDevInfo(QJsonObject &obj) {
 
 	
 	if (ui->btnOn->isChecked()) {
-		qDebug() << "DHCP ON -> no others message";
+		if (SHOWDEBUG) qDebug() << "DHCP ON -> no others message";
 	}
 
 	if (ui->btnOff->isChecked()) {
@@ -177,7 +177,7 @@ bool dialogDevice::setDevInfo(QJsonObject &obj) {
 			QJsonArray array;
 			for (int i = 0; i < dnsList.count(); i++) {
 				array.append(dnsList[i]);
-				qDebug() << "DNS: " << dnsList[i];
+				if (SHOWDEBUG) qDebug() << "DNS: " << dnsList[i];
 			}
 			obj.insert("dns", array);
 		}

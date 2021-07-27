@@ -25,7 +25,7 @@ dialogUser::~dialogUser()
 }
 
 void dialogUser::updateUserinfo(const QJsonObject &obj) {
-	qDebug() << __func__;
+	if (SHOWDEBUG) qDebug() << __func__;
 	ui->tableWidget->setRowCount(0);
 	QJsonArray array = obj["users"].toArray();
 
@@ -35,7 +35,7 @@ void dialogUser::updateUserinfo(const QJsonObject &obj) {
 		ui->tableWidget->setRowCount(row + 1);
 		ui->tableWidget->setItem(row, 0, new QTableWidgetItem(user["username"].toString()));
 		QString auth = user["userauth"].toString();
-		qDebug() << auth;
+		if (SHOWDEBUG) qDebug() << auth;
 		if (QString::compare(auth, "0") == 0) {
 			ui->tableWidget->setItem(row, 1, new QTableWidgetItem("Admin"));
 		}
@@ -54,7 +54,7 @@ void dialogUser::updateUserinfo(const QJsonObject &obj) {
 }
 
 void dialogUser::userAddOpen(){
-	qDebug() << __func__;
+	if (SHOWDEBUG) qDebug() << __func__;
 	dialogUserEdit dialog(this);
 
 	if (dialog.exec() == QDialog::Accepted) {
@@ -66,7 +66,7 @@ void dialogUser::userAddOpen(){
 }
 
 void dialogUser::userEditOpen(){
-	qDebug() << __func__;
+	if (SHOWDEBUG) qDebug() << __func__;
 	int index;
 	index = ui->tableWidget->currentRow();
 	if (index >= 0) {
@@ -91,7 +91,7 @@ void dialogUser::userDel(){
 
 	int index;
 	index = ui->tableWidget->currentRow();
-	qDebug() << "currentRow:" << ui->tableWidget->currentRow();
+	if (SHOWDEBUG) qDebug() << "currentRow:" << ui->tableWidget->currentRow();
 
 	reply = QMessageBox::question(this, "User Delete", "Do you want delecte user:" + 
 		ui->tableWidget->item(index, 0)->text() + " ?",

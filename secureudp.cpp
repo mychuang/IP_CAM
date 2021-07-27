@@ -18,17 +18,17 @@ SecureUdp::SecureUdp(QObject *parent) : QObject(parent)
 
 	bool bindResult = udpReceiver.bind(MCAST_PORT + 1, QUdpSocket::ShareAddress);
 	if (!bindResult) {
-		qDebug() << "error bind";
+		if(SHOWDEBUG) qDebug() << "error bind";
 	}
 	else {
-		qDebug() << "binding in" << MCAST_PORT + 1;
+		if (SHOWDEBUG) qDebug() << "binding in" << MCAST_PORT + 1;
 	}
 	connect(&udpReceiver, &QUdpSocket::readyRead, this, &SecureUdp::processPendingDatagrams);
 }
 #endif
 
 void SecureUdp::generateAesKey(){
-    qDebug() << __func__;
+	if (SHOWDEBUG) qDebug() << __func__;
         int i;
         int j;
         int r;
@@ -48,7 +48,7 @@ void SecureUdp::generateAesKey(){
 }
 
 void SecureUdp::prob() {
-	qDebug() << __func__;
+	if (SHOWDEBUG) qDebug() << __func__;
 
 	struct Message msg;
 	msg.magic = MCAST_MSG_MAGIC;
@@ -65,10 +65,10 @@ void SecureUdp::run() {
 	struct Message msg;
 	bool bindResult = udpReceiver.bind(MCAST_PORT + 1, QUdpSocket::ShareAddress);
 	if (!bindResult) {
-		qDebug() << "error bind";
+		if (SHOWDEBUG) qDebug() << "error bind";
 	}
 	else {
-		qDebug() << "binding in" << MCAST_PORT + 1;
+		if (SHOWDEBUG) qDebug() << "binding in" << MCAST_PORT + 1;
 	}
 
 	while (!m_done) {
@@ -81,19 +81,19 @@ void SecureUdp::run() {
 			continue;
 
 		if (memcmp(msg.to, mac, 6)) {
-			qDebug() << "I'm not receiver";
+			if (SHOWDEBUG) qDebug() << "I'm not receiver";
 			continue;
 		}
 
-		qDebug("type: %02x", msg.type);
+		if (SHOWDEBUG) qDebug("type: %02x", msg.type);
 		switch (msg.type) {
 		case MCAST_MSG_PROBE_RESPONSE: {
-			qDebug() << "run: handle Response";
+			if (SHOWDEBUG) qDebug() << "run: handle Response";
 			handleProbeResponse(&msg);
 			break;
 		}
 		case MCAST_MSG_GETPUBKEY_RESPONSE: {
-			qDebug() << "run: get PUBKEY";
+			if (SHOWDEBUG) qDebug() << "run: get PUBKEY";
 			Device *dev = findDevice(msg.from);
 			if (dev) {
 				dev->pKey = loadPUBLICKeyFromString((const char *)msg.data);
@@ -102,7 +102,7 @@ void SecureUdp::run() {
 			break;
 		}
 		case MCAST_MSG_SETAESKEY_ACK: {
-			qDebug() << "run: AES ok!";
+			if (SHOWDEBUG) qDebug() << "run: AES ok!";
 			Device *dev = findDevice(msg.from);
 			if (dev) {
 				dev->aes_ready = true;
@@ -110,7 +110,7 @@ void SecureUdp::run() {
 			break;
 		}
 		case MCAST_MSG_CIPHERDATA: {
-			qDebug() << "run: get CIPHERDATA";
+			if (SHOWDEBUG) qDebug() << "run: get CIPHERDATA";
 			Device *dev = findDevice(msg.from);
 			if (dev) {
 				handleCipherdata(dev, &msg);
@@ -118,7 +118,7 @@ void SecureUdp::run() {
 			break;
 		}
 		default:
-			qDebug() << "%s: unhanlded message type" << msg.type;
+			if (SHOWDEBUG) qDebug() << "%s: unhanlded message type" << msg.type;
 		}
 	}
 }
@@ -134,19 +134,19 @@ void SecureUdp::processPendingDatagrams() {
 		if (msg.magic != MCAST_MSG_MAGIC)
 			continue;
 		if (memcmp(msg.to, mac, 6) != 0) {
-			qDebug() << "I'm not receiver";
+			if (SHOWDEBUG) qDebug() << "I'm not receiver";
 			continue;
 		}
 
-		qDebug("type: %02x", msg.type);
+		if (SHOWDEBUG) qDebug("type: %02x", msg.type);
 		switch (msg.type) {
 		case MCAST_MSG_PROBE_RESPONSE: {
-			qDebug() << "run: handle Response";
+			if (SHOWDEBUG) qDebug() << "run: handle Response";
 			handleProbeResponse(&msg);
 			break;
 		}
 		case MCAST_MSG_GETPUBKEY_RESPONSE: {
-			qDebug() << "run: get PUBKEY";
+			if (SHOWDEBUG) qDebug() << "run: get PUBKEY";
 			Device *dev = findDevice(msg.from);
 			if (dev) {
 				dev->pKey = loadPUBLICKeyFromString((const char *)msg.data);
@@ -155,7 +155,7 @@ void SecureUdp::processPendingDatagrams() {
 			break;
 		}
 		case MCAST_MSG_SETAESKEY_ACK: {
-			qDebug() << "run: AES ok!";
+			if (SHOWDEBUG) qDebug() << "run: AES ok!";
 			Device *dev = findDevice(msg.from);
 			if (dev) {
 				dev->aes_ready = true;
@@ -163,7 +163,7 @@ void SecureUdp::processPendingDatagrams() {
 			break;
 		}
 		case MCAST_MSG_CIPHERDATA: {
-			qDebug() << "run: get CIPHERDATA";
+			if (SHOWDEBUG) qDebug() << "run: get CIPHERDATA";
 			Device *dev = findDevice(msg.from);
 			if (dev) {
 				handleCipherdata(dev, &msg);
@@ -171,7 +171,7 @@ void SecureUdp::processPendingDatagrams() {
 			break;
 		}
 		default:
-			qDebug() << "%s: unhanlded message type" << msg.type;
+			if (SHOWDEBUG) qDebug() << "%s: unhanlded message type" << msg.type;
 		}
 	} while (udpReceiver.hasPendingDatagrams());
 
@@ -180,7 +180,7 @@ void SecureUdp::processPendingDatagrams() {
 void SecureUdp::handleProbeResponse(Message *msg) {
 	Device *dev = findDevice(msg->from);
 	if (dev) {
-		qDebug() << __func__ << "duplicate probe response";
+		if (SHOWDEBUG) qDebug() << __func__ << "duplicate probe response";
 		return;
 	}
 
@@ -199,9 +199,9 @@ void SecureUdp::handleProbeResponse(Message *msg) {
 	dev->name = jsonObj["name"].toString();
 	dev->ip = jsonObj["ip"].toString();
 	deviceList.push_back(dev);
-	qDebug() << dev->model;
-	qDebug() << dev->name;
-	qDebug() << dev->ip;
+	if (SHOWDEBUG) qDebug() << dev->model;
+	if (SHOWDEBUG) qDebug() << dev->name;
+	if (SHOWDEBUG) qDebug() << dev->ip;
 
 	QString from;
 	from.sprintf("%02x:%02x:%02x:%02x:%02x:%02x",
@@ -216,12 +216,12 @@ Device* SecureUdp::findDevice(uint8_t *mac) {
 
 	for (int i = 0; i < deviceList.size(); i++) {
 		if (memcmp(deviceList[i]->mac, mac, 6) == 0) {
-			qDebug("find_device: %02x:%02x:%02x:%02x:%02x:%02x",
+			if (SHOWDEBUG) qDebug("find_device: %02x:%02x:%02x:%02x:%02x:%02x",
 				mac[0], mac[1], mac[2], mac[3], mac[4], mac[5], mac[6]);
 			return deviceList[i];
 		}
 	}
-	qDebug(" %s New Device in !! ", stderr);
+	if (SHOWDEBUG) qDebug(" %s New Device in !! ", stderr);
 	return NULL;
 }
 
@@ -234,7 +234,7 @@ void SecureUdp::cleanDeviceList() {
 }
 
 void SecureUdp::requestPublicKey(uint8_t *devMac) {
-	qDebug() << __func__;
+	if (SHOWDEBUG) qDebug() << __func__;
 
 	struct Message msg;
 	msg.magic = MCAST_MSG_MAGIC;
@@ -247,7 +247,7 @@ void SecureUdp::requestPublicKey(uint8_t *devMac) {
 }
 
 void SecureUdp::setAesKey(Device *dev) {
-	qDebug() << __func__;
+	if (SHOWDEBUG) qDebug() << __func__;
 
 	struct Message msg;
 	uint8_t buf[256]; // 2048bits
@@ -266,10 +266,10 @@ void SecureUdp::setAesKey(Device *dev) {
 }
 
 void SecureUdp::cmdSend(const QString &cmd, const QJsonObject *data) {
-	qDebug() << "cmd:" << cmd;
+	if (SHOWDEBUG) qDebug() << "cmd:" << cmd;
 
 	if (!device) {
-		qDebug() << "no active device";
+		if (SHOWDEBUG) qDebug() << "no active device";
 		return;
 	}
 	else {
@@ -299,7 +299,7 @@ void SecureUdp::cmdSend(const QString &cmd, const QJsonObject *data) {
 		QByteArray secureCmd;
 		//bytes = jsonDoc.toJson();//
 		secureCmd = jsonDoc.toJson();
-		qDebug() << "json message:" << secureCmd;
+		if (SHOWDEBUG) qDebug() << "json message:" << secureCmd;
 
 		unsigned char msgDataIn[1024];
 		memset(msgDataIn, 0, secureCmd.size());
@@ -309,13 +309,13 @@ void SecureUdp::cmdSend(const QString &cmd, const QJsonObject *data) {
 
 		AES_cbc_encrypt(msgDataIn, msg.data, msg.size, &enc_key, device->iv, AES_ENCRYPT);
 		udpSender.writeDatagram((const char *)&msg, offsetof(struct Message, data) + msg.size, groupAddress, MCAST_PORT);
-		qDebug() << "--- write cmd Datagram ---";
+		if (SHOWDEBUG) qDebug() << "--- write cmd Datagram ---";
 
 	}
 }
 
 void SecureUdp::handleCipherdata(Device *dev, struct Message *msg) {
-	qDebug() << __func__;
+	if (SHOWDEBUG) qDebug() << __func__;
 	char plain[1400];
 	AES_cbc_encrypt(msg->data, (unsigned char *)plain, msg->size,
 		&dec_key, dev->iv, AES_DECRYPT);
@@ -332,10 +332,10 @@ void SecureUdp::handleCipherdata(Device *dev, struct Message *msg) {
 
 	QJsonObject obj = jsonDoc.object();
 	//qDebug() << obj;
-	qDebug() << obj["response"];
+	if (SHOWDEBUG) qDebug() << obj["response"];
 	//qDebug() << obj["nowauth"];
 	//qDebug() << obj["nowuser"];
-	qDebug() << obj["users"];
+	if (SHOWDEBUG) qDebug() << obj["users"];
 	
 	emit deviceResponse(dev, obj);
 
