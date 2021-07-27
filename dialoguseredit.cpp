@@ -2,6 +2,7 @@
 #include "ui_dialoguseredit.h"
 #include <QAbstractButton>
 #include <QDebug>
+#include <QRegExpValidator>
 
 dialogUserEdit::dialogUserEdit(QWidget *parent) :
     QDialog(parent),
@@ -9,8 +10,10 @@ dialogUserEdit::dialogUserEdit(QWidget *parent) :
 {
     ui->setupUi(this);
 	setWindowTitle("User Edit");
-
 	ui->btnAdmin->setChecked(true);
+	connect(ui->btnOk, &QPushButton::clicked, this, &dialogUserEdit::onOkClick);
+	connect(ui->btnCancle, &QPushButton::clicked, this, &dialogUserEdit::onCancelClick);
+
 }
 
 dialogUserEdit::dialogUserEdit(const QString &user, const QString &auth, QWidget *parent):
@@ -30,6 +33,9 @@ dialogUserEdit::dialogUserEdit(const QString &user, const QString &auth, QWidget
 	else {
 		ui->btnView->setChecked(true);
 	}
+
+	connect(ui->btnOk, &QPushButton::clicked, this, &dialogUserEdit::onOkClick);
+	connect(ui->btnCancle, &QPushButton::clicked, this, &dialogUserEdit::onCancelClick);
 }
 
 dialogUserEdit::~dialogUserEdit()
@@ -37,16 +43,23 @@ dialogUserEdit::~dialogUserEdit()
     delete ui;
 }
 
-void dialogUserEdit::on_buttonBox_rejected(){
+void dialogUserEdit::onCancelClick(){
 	reject();
 }
 
-void dialogUserEdit::on_buttonBox_accepted(){
+void dialogUserEdit::onOkClick(){
+	QRegExp rx;
+	rx.setPattern("\\S+");
+	QRegExpValidator v(rx, 0);
+	v.setRegExp(rx);
+	int pos = 0;
 
 	ui->labMsg->setText("");
-
-	if (ui->editUser->text() == NULL || ui->editPwd->text() == NULL) {
-		ui->labMsg->setText("Please add name or password");
+	if (v.validate(ui->editUser->text(), pos) == QValidator::Invalid ||
+		v.validate(ui->editUser->text(), pos) == QValidator::Intermediate ||
+		v.validate(ui->editPwd->text(), pos) == QValidator::Invalid ||
+		v.validate(ui->editPwd->text(), pos) == QValidator::Intermediate) {
+		ui->labMsg->setText("Invalid name or password");
 	}
 	else {
 		if (QString::compare(ui->editPwd->text(), ui->editPwdChk->text()) == 0) {
@@ -56,6 +69,7 @@ void dialogUserEdit::on_buttonBox_accepted(){
 			ui->labMsg->setText("Please confirm password");
 		}
 	}
+
 }
 
 QString dialogUserEdit::username(){

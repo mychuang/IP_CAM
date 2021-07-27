@@ -2,6 +2,8 @@
 #include "dialoguser.h"
 #include "ui_dialogdevice.h"
 #include <QJsonArray>
+#include <QRegExpValidator>
+#include <QMessageBox>
 
 dialogDevice::dialogDevice(QWidget *parent) :
     QDialog(parent),
@@ -15,7 +17,6 @@ dialogDevice::dialogDevice(QWidget *parent) :
 	connect(ui->btnExit, &QAbstractButton::clicked, this, &dialogDevice::dialogQuit);
 
 	connect(ui->btnUpdate, &QAbstractButton::clicked, this, &dialogDevice::setNetwork);
-	connect(ui->btnUpdate, &QAbstractButton::clicked, this, &dialogDevice::accept);
 	connect(ui->btnEdit, &QAbstractButton::clicked, this, &dialogDevice::userEditReturn);
 }
 
@@ -105,39 +106,93 @@ void dialogDevice::dhcpOff(){
 void dialogDevice::setNetwork() {
 	qDebug() << __func__;
 	QJsonObject obj;
-	setDevInfo(obj);
-	
-	emit setNetworkSignal(&obj);
-	done(btnOk);
+
+	if (setDevInfo(obj) == true) {
+		emit setNetworkSignal(&obj);
+		done(btnOk);
+	}
 }
 
-void dialogDevice::setDevInfo(QJsonObject &obj) {
-	obj["devname"] = ui->editName->text();
-	obj["dhcp"] = ui->btnOn->isChecked();
+bool dialogDevice::setDevInfo(QJsonObject &obj) {
+	QStringList errInfo;
+	QRegExp rx;
+	rx.setPattern("\\S+");
+	QRegExpValidator v(rx, 0);
+	v.setRegExp(rx);
+	int pos = 0;
+
+	if (v.validate(ui->editName->text(), pos) == QValidator::Invalid ||
+		v.validate(ui->editName->text(), pos) == QValidator::Intermediate) {
+		qDebug() << "name error";
+		errInfo.append("Name");
+	}
+	else {
+		obj["devname"] = ui->editName->text();
+		obj["dhcp"] = ui->btnOn->isChecked();
+	}
+
 	
 	if (ui->btnOn->isChecked()) {
 		qDebug() << "DHCP ON -> no others message";
 	}
 
 	if (ui->btnOff->isChecked()) {
-		obj["ip"] = ui->editIP->text();
-		obj["netmask"] = ui->editNetmask->text();
-		obj["gateway"] = ui->editGateway->text();
+		rx.setPattern("^(?:25[0-5]|2[0-4]\\d|[0-1]?\\d{1,2})(?:\\.(?:25[0-5]|2[0-4]\\d|[0-1]?\\d{1,2})){3}$");
+		v.setRegExp(rx);
+		int pos = 0;
+		if (v.validate(ui->editIP->text(), pos) == QValidator::Invalid ||
+			v.validate(ui->editIP->text(), pos) == QValidator::Intermediate) {
+			errInfo.append("IP");
+		}
+		else {
+			obj["ip"] = ui->editIP->text();
+		}
+		if (v.validate(ui->editNetmask->text(), pos) == QValidator::Invalid ||
+			v.validate(ui->editNetmask->text(), pos) == QValidator::Intermediate) {
+			errInfo.append("Netmask");
+		}
+		else {
+			obj["netmask"] = ui->editNetmask->text();
+		}
+		if (v.validate(ui->editGateway->text(), pos) == QValidator::Invalid ||
+			v.validate(ui->editGateway->text(), pos) == QValidator::Intermediate) {
+			errInfo.append("Gateway");
+		}
+		else {
+			obj["gateway"] = ui->editGateway->text();
+		}
+
+		QStringList dnsList = ui->editDNS->text().split(",", QString::SkipEmptyParts);
+		int dnsErrorCnt = 0;
+		for (int i = 0; i < dnsList.count(); i++) {
+			if (v.validate(dnsList[i], pos) == QValidator::Invalid ||
+				v.validate(dnsList[i], pos) == QValidator::Intermediate) {
+				dnsErrorCnt++;
+			}
+		}
+		if (dnsErrorCnt > 0) {
+			errInfo.append("DNS");
+		}
+		else {
+			QJsonArray array;
+			for (int i = 0; i < dnsList.count(); i++) {
+				array.append(dnsList[i]);
+				qDebug() << "DNS: " << dnsList[i];
+			}
+			obj.insert("dns", array);
+		}
 	}
 
-	if (ui->editDNS->text().size() > 0) {
-		QStringList dns_list = ui->editDNS->text().split(",", QString::SkipEmptyParts);
-		QJsonArray array;
-		for (int i = 0; i < dns_list.count(); i++) {
-			array.append(dns_list[i]);
-			qDebug() << "DNS: " << dns_list[i];
-		}
-		obj.insert("dns", array);
+	if (errInfo.size() == 0) {
+		return true;
 	}
 	else {
-		qDebug() << "DNS error ";
+		QString errMsg = errInfo.join(",");
+		QMessageBox msgbox;
+		msgbox.setText("Invalid input: " + errMsg);
+		msgbox.exec();
+		return false;
 	}
-
 }
 
 void dialogDevice::userEditReturn() {
