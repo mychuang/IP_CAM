@@ -25,7 +25,7 @@ public:
 private:
     Ui::dialogDevice *ui;
 
-	void setDevInfo(QJsonObject &obj);
+	bool setDevInfo(QJsonObject &obj);
 
 private slots:
 	void dhcpOn();

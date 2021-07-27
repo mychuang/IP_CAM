@@ -12,11 +12,12 @@
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QDialog>
-#include <QtWidgets/QDialogButtonBox>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QGroupBox>
+#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QRadioButton>
 #include <QtWidgets/QWidget>
 
@@ -25,7 +26,6 @@ QT_BEGIN_NAMESPACE
 class Ui_dialogUserEdit
 {
 public:
-    QDialogButtonBox *buttonBox;
     QWidget *gridLayoutWidget;
     QGridLayout *gridLayout;
     QLabel *labUser;
@@ -39,20 +39,16 @@ public:
     QRadioButton *btnOperator;
     QRadioButton *btnView;
     QLabel *labMsg;
+    QWidget *horizontalLayoutWidget;
+    QHBoxLayout *horizontalLayout;
+    QPushButton *btnOk;
+    QPushButton *btnCancle;
 
     void setupUi(QDialog *dialogUserEdit)
     {
         if (dialogUserEdit->objectName().isEmpty())
             dialogUserEdit->setObjectName(QString::fromUtf8("dialogUserEdit"));
-        dialogUserEdit->resize(400, 348);
-        buttonBox = new QDialogButtonBox(dialogUserEdit);
-        buttonBox->setObjectName(QString::fromUtf8("buttonBox"));
-        buttonBox->setGeometry(QRect(200, 300, 172, 30));
-        QFont font;
-        font.setPointSize(14);
-        buttonBox->setFont(font);
-        buttonBox->setOrientation(Qt::Horizontal);
-        buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
+        dialogUserEdit->resize(410, 353);
         gridLayoutWidget = new QWidget(dialogUserEdit);
         gridLayoutWidget->setObjectName(QString::fromUtf8("gridLayoutWidget"));
         gridLayoutWidget->setGeometry(QRect(10, 20, 371, 161));
@@ -61,6 +57,8 @@ public:
         gridLayout->setContentsMargins(0, 0, 0, 0);
         labUser = new QLabel(gridLayoutWidget);
         labUser->setObjectName(QString::fromUtf8("labUser"));
+        QFont font;
+        font.setPointSize(14);
         labUser->setFont(font);
 
         gridLayout->addWidget(labUser, 0, 0, 1, 1);
@@ -116,10 +114,27 @@ public:
         labMsg->setObjectName(QString::fromUtf8("labMsg"));
         labMsg->setGeometry(QRect(20, 260, 271, 31));
         labMsg->setFont(font);
+        horizontalLayoutWidget = new QWidget(dialogUserEdit);
+        horizontalLayoutWidget->setObjectName(QString::fromUtf8("horizontalLayoutWidget"));
+        horizontalLayoutWidget->setGeometry(QRect(190, 290, 191, 51));
+        horizontalLayout = new QHBoxLayout(horizontalLayoutWidget);
+        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
+        horizontalLayout->setContentsMargins(0, 0, 0, 0);
+        btnOk = new QPushButton(horizontalLayoutWidget);
+        btnOk->setObjectName(QString::fromUtf8("btnOk"));
+        btnOk->setMinimumSize(QSize(30, 30));
+        btnOk->setFont(font);
+
+        horizontalLayout->addWidget(btnOk);
+
+        btnCancle = new QPushButton(horizontalLayoutWidget);
+        btnCancle->setObjectName(QString::fromUtf8("btnCancle"));
+        btnCancle->setFont(font);
+
+        horizontalLayout->addWidget(btnCancle);
+
 
         retranslateUi(dialogUserEdit);
-        QObject::connect(buttonBox, SIGNAL(accepted()), dialogUserEdit, SLOT(accept()));
-        QObject::connect(buttonBox, SIGNAL(rejected()), dialogUserEdit, SLOT(reject()));
 
         QMetaObject::connectSlotsByName(dialogUserEdit);
     } // setupUi
@@ -135,6 +150,8 @@ public:
         btnOperator->setText(QCoreApplication::translate("dialogUserEdit", "Operator", nullptr));
         btnView->setText(QCoreApplication::translate("dialogUserEdit", "View", nullptr));
         labMsg->setText(QString());
+        btnOk->setText(QCoreApplication::translate("dialogUserEdit", "ok", nullptr));
+        btnCancle->setText(QCoreApplication::translate("dialogUserEdit", "Cancle", nullptr));
     } // retranslateUi
 
 };

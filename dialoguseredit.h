@@ -24,8 +24,8 @@ private:
     Ui::dialogUserEdit *ui;
 
 private slots:
-	void on_buttonBox_accepted();
-	void on_buttonBox_rejected();
+	void onOkClick();
+	void onCancelClick();
 };
 
 #endif // DIALOGUSEREDIT_H
