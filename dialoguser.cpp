@@ -1,6 +1,7 @@
 #include "dialoguser.h"
 #include "ui_dialoguser.h"
 #include <QMessageBox>
+#include <QRegExpValidator>
 #include "dialoguseredit.h"
 
 dialogUser::dialogUser(QWidget *parent) :

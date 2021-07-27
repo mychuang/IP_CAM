@@ -17,7 +17,6 @@ dialogDevice::dialogDevice(QWidget *parent) :
 	connect(ui->btnExit, &QAbstractButton::clicked, this, &dialogDevice::dialogQuit);
 
 	connect(ui->btnUpdate, &QAbstractButton::clicked, this, &dialogDevice::setNetwork);
-	//connect(ui->btnUpdate, &QAbstractButton::clicked, this, &dialogDevice::accept);
 	connect(ui->btnEdit, &QAbstractButton::clicked, this, &dialogDevice::userEditReturn);
 }
 
