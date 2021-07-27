@@ -79,7 +79,7 @@ void MainWindow::initialUI() {
 	//Btn UI
 	ui->probBtn->setStyleSheet("background-color: rgb(166, 225, 252);"
 		"font: 87 12pt Arial Black;"
-		"color: rgb(0, 0, 0)");
+		"color: rgb(0, 0, 0);");
 	ui->cleanBtn->setStyleSheet("background-color: rgb(167,251,183);"
 		"font: 87 12pt Arial Black;"
 		"color: rgb(0, 0, 0)");
@@ -154,10 +154,24 @@ void MainWindow::signInOpen(int row, int column){
 	dialogLogin dialog(ui->userNameEdit->text(), ui->passwordEdit->text(), this);
 
 	if (dialog.exec() == QDialog::Accepted) {
-		dev->username = dialog.getUsername();
-		dev->password = dialog.getPassword();
-		secUdp.setDevice(dev);
-		secUdp.cmdSend("GetNetwork", NULL);
+		QRegExp rx;
+		rx.setPattern("\\S+");
+		QRegExpValidator v(rx, 0);
+		v.setRegExp(rx);
+		int pos = 0;
+
+		if (v.validate(dialog.getUsername(), pos) == QValidator::Invalid || 
+			v.validate(dialog.getPassword(), pos) == QValidator::Intermediate) {
+			QMessageBox msgbox;
+			msgbox.setText("Invalid input");
+			msgbox.exec();
+		}
+		else {
+			dev->username = dialog.getUsername();
+			dev->password = dialog.getPassword();
+			secUdp.setDevice(dev);
+			secUdp.cmdSend("GetNetwork", NULL);
+		}
 	}
 }
 
