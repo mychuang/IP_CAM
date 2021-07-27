@@ -14,7 +14,8 @@
    <string>Dialog</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QPushButton:hover { color:  blue}</string>
+   <string notr="true">QPushButton:hover { color:  #1aadad}
+QPushButton { background-color: #e0baba }</string>
   </property>
   <widget class="QWidget" name="formLayoutWidget">
    <property name="geometry">
@@ -271,13 +272,44 @@
   <widget class="QWidget" name="horizontalLayoutWidget_2">
    <property name="geometry">
     <rect>
-     <x>280</x>
+     <x>50</x>
      <y>340</y>
-     <width>201</width>
+     <width>431</width>
      <height>80</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <item>
+     <widget class="QPushButton" name="btnEdit">
+      <property name="minimumSize">
+       <size>
+        <width>30</width>
+        <height>50</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>User Edit</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <spacer name="horizontalSpacer_2">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
     <item>
      <widget class="QPushButton" name="btnUpdate">
       <property name="minimumSize">
@@ -290,6 +322,10 @@
        <font>
         <pointsize>14</pointsize>
        </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton#btnUpdate { background-color: #67e6e6 }
+QPushButton#btnUpdate:hover { color: white }</string>
       </property>
       <property name="text">
        <string>Update</string>
@@ -309,36 +345,16 @@
         <pointsize>14</pointsize>
        </font>
       </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton#btnExit { background-color: #67e6e6 }
+QPushButton#btnExit:hover { color: white }</string>
+      </property>
       <property name="text">
        <string>Exit</string>
       </property>
      </widget>
     </item>
    </layout>
-  </widget>
-  <widget class="QPushButton" name="btnEdit">
-   <property name="geometry">
-    <rect>
-     <x>50</x>
-     <y>350</y>
-     <width>101</width>
-     <height>50</height>
-    </rect>
-   </property>
-   <property name="minimumSize">
-    <size>
-     <width>30</width>
-     <height>50</height>
-    </size>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>14</pointsize>
-    </font>
-   </property>
-   <property name="text">
-    <string>User Edit</string>
-   </property>
   </widget>
  </widget>
  <resources/>

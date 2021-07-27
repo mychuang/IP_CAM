@@ -175,6 +175,9 @@
      <pointsize>14</pointsize>
     </font>
    </property>
+   <property name="styleSheet">
+    <string notr="true">QLabel {color: #db358b}</string>
+   </property>
    <property name="text">
     <string/>
    </property>
