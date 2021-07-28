@@ -164,7 +164,8 @@ void MainWindow::signInOpen(int row, int column){
 
 	if (dialog.exec() == QDialog::Accepted) {
 		QRegExp rx;
-		rx.setPattern("\\S+");
+		//rx.setPattern("\\S+");
+		rx.setPattern("^(?=[\\S]{4,32})[\\S]*");
 		QRegExpValidator v(rx, 0);
 		v.setRegExp(rx);
 		int pos = 0;
