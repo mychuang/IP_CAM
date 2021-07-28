@@ -98,11 +98,6 @@ void dialogUser::userDel(){
 	int index;
 	index = ui->tableWidget->currentRow();
 	if (SHOWDEBUG) qDebug() << "currentRow:" << ui->tableWidget->currentRow();
-	
-	//if (QString::compare(currentUser, ui->tableWidget->item(index, 0)->text()) == 0) {
-	//	reply = QMessageBox::question(this, "User Delete", "You cannot delete self.  ", QMessageBox::Ok);
-	//	return;
-	//}
 
 	reply = QMessageBox::question(this, "User Delete", "Do you want delecte user:" + 
 		ui->tableWidget->item(index, 0)->text() + " ?",

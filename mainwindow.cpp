@@ -187,6 +187,10 @@ void MainWindow::handleResponse(Device *dev, const QJsonObject &obj) {
 		QMessageBox msgbox;
 		msgbox.setText(obj["detail"].toString());
 		msgbox.exec();
+		waitAnimation(false);
+		ui->tableWidget->blockSignals(false);
+		ui->tableWidget->setAlternatingRowColors(true);
+		ui->tableWidget->setStyleSheet("alternate-background-color: #dcf2d8; background: white; color: #152ae8; ");
 		return;
 	}
 	else if (obj["response"] == "SetNetwork") {

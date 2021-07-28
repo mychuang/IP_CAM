@@ -16,6 +16,17 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QPushButton#btnAdd {background-color: #bcaaa4}
+QPushButton#btnDel {background-color:  #bcaaa4}
+QPushButton#btnEdit {background-color:  #bcaaa4}
+QPushButton#btnQuit {background-color:  #bcaaa4}
+QPushButton#btnAdd:hover {background-color: #dade73; color: #0dadde}
+QPushButton#btnDel:hover {background-color: #dade73; color: #0dadde}
+QPushButton#btnEdit:hover {background-color: #dade73; color: #0dadde}
+QPushButton#btnQuit:hover {background-color:#dade73; color: #0dadde}
+</string>
+  </property>
   <widget class="QTableWidget" name="tableWidget">
    <property name="geometry">
     <rect>
@@ -97,6 +108,9 @@
        <font>
         <pointsize>14</pointsize>
        </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
       </property>
       <property name="text">
        <string>Edit</string>
