@@ -69,15 +69,21 @@ void dialogDevice::updateDevInfo(const QJsonObject &obj, Device *dev) {
 
 	if(QString::compare(nowAuth, "0") == 0) {
 		ui->labUser->setText("\"" + nowUser + "\" Login (Admin)");
+		ui->btnEdit->setEnabled(true);
 	}
 	else if (QString::compare(nowAuth, "1") == 0) {
 		ui->labUser->setText("\"" + nowUser + "\" Login (Operator)");
+		ui->btnEdit->setEnabled(false);
+		ui->btnEdit->setStyleSheet("background-color: gray; color: white");
 	}
 	else if (QString::compare(nowAuth, "2") == 0) {
 		ui->labUser->setText("\"" + nowUser + "\" Login (Viewer)");
+		ui->btnEdit->setEnabled(false);
+		ui->btnEdit->setStyleSheet("background-color: gray; color: white");
 	}
 	else {
 		ui->labUser->setText("\"" + dev->username + "\"  Login");
+		ui->btnEdit->setEnabled(true);
 	}
 	ui->labUser->setStyleSheet("color: rgb(89, 95, 207)");
 }
