@@ -13,9 +13,7 @@ dialogDevice::dialogDevice(QWidget *parent) :
 	setWindowTitle("Device Information");
 	connect(ui->btnOn, &QAbstractButton::clicked, this, &dialogDevice::dhcpOn);
 	connect(ui->btnOff, &QAbstractButton::clicked, this, &dialogDevice::dhcpOff);
-
 	connect(ui->btnExit, &QAbstractButton::clicked, this, &dialogDevice::dialogQuit);
-
 	connect(ui->btnUpdate, &QAbstractButton::clicked, this, &dialogDevice::setNetwork);
 	connect(ui->btnEdit, &QAbstractButton::clicked, this, &dialogDevice::userEditReturn);
 }
@@ -55,7 +53,6 @@ void dialogDevice::updateDevInfo(const QJsonObject &obj, Device *dev) {
 		ui->editNetmask->setDisabled(false);
 		ui->editGateway->setDisabled(false);
 		ui->editDNS->setDisabled(false);
-
 	}
 
 	//set other UI
@@ -72,15 +69,21 @@ void dialogDevice::updateDevInfo(const QJsonObject &obj, Device *dev) {
 
 	if(QString::compare(nowAuth, "0") == 0) {
 		ui->labUser->setText("\"" + nowUser + "\" Login (Admin)");
+		ui->btnEdit->setEnabled(true);
 	}
 	else if (QString::compare(nowAuth, "1") == 0) {
 		ui->labUser->setText("\"" + nowUser + "\" Login (Operator)");
+		ui->btnEdit->setEnabled(false);
+		ui->btnEdit->setStyleSheet("background-color: gray; color: white");
 	}
 	else if (QString::compare(nowAuth, "2") == 0) {
 		ui->labUser->setText("\"" + nowUser + "\" Login (Viewer)");
+		ui->btnEdit->setEnabled(false);
+		ui->btnEdit->setStyleSheet("background-color: gray; color: white");
 	}
 	else {
 		ui->labUser->setText("\"" + dev->username + "\"  Login");
+		ui->btnEdit->setEnabled(true);
 	}
 	ui->labUser->setStyleSheet("color: rgb(89, 95, 207)");
 }

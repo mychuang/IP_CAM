@@ -49,7 +49,8 @@ void dialogUserEdit::onCancelClick(){
 
 void dialogUserEdit::onOkClick(){
 	QRegExp rx;
-	rx.setPattern("\\S+");
+	//rx.setPattern("\\S+");
+	rx.setPattern("^(?=[\\S]{4,32})[\\S]*");
 	QRegExpValidator v(rx, 0);
 	v.setRegExp(rx);
 	int pos = 0;
@@ -59,7 +60,7 @@ void dialogUserEdit::onOkClick(){
 		v.validate(ui->editUser->text(), pos) == QValidator::Intermediate ||
 		v.validate(ui->editPwd->text(), pos) == QValidator::Invalid ||
 		v.validate(ui->editPwd->text(), pos) == QValidator::Intermediate) {
-		ui->labMsg->setText("Invalid name or password");
+		ui->labMsg->setText("Too short name or password");
 	}
 	else {
 		if (QString::compare(ui->editPwd->text(), ui->editPwdChk->text()) == 0) {

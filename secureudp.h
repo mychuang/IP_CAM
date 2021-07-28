@@ -1,7 +1,7 @@
 #ifndef SECUREUDP_H
 #define SECUREUDP_H
 #define QThreadEnabled 1
-#define SHOWDEBUG false
+#define SHOWDEBUG true
 
 #include "crypto.h"
 #include <QObject>

@@ -22,12 +22,13 @@ public:
     explicit dialogUser(QWidget *parent = nullptr);
     ~dialogUser();
 
-	void updateUserinfo(const QJsonObject &obj);
+	void updateUserinfo(const QJsonObject &obj, Device *dev);
 	static const int btnQuit = 2;
 	static const int btnInt = 3;
 
 private:
     Ui::dialogUser *ui;
+	QString currentUser;
 
 
 private slots:
@@ -35,6 +36,7 @@ private slots:
 	void userAddOpen();
 	void userDel();
 	void userQuit();
+	void DelBtnUI(int row, int column);
 
 signals:
 	void userQuitSignal();
