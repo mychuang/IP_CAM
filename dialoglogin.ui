@@ -48,6 +48,7 @@
      <widget class="QLabel" name="userlab">
       <property name="font">
        <font>
+        <family>Microsoft YaHei</family>
         <pointsize>12</pointsize>
         <weight>75</weight>
         <bold>true</bold>
@@ -68,6 +69,7 @@
       </property>
       <property name="font">
        <font>
+        <family>Microsoft YaHei</family>
         <pointsize>12</pointsize>
        </font>
       </property>
@@ -77,6 +79,7 @@
      <widget class="QLabel" name="pwdLab">
       <property name="font">
        <font>
+        <family>Microsoft YaHei</family>
         <pointsize>12</pointsize>
         <weight>75</weight>
         <bold>true</bold>
@@ -97,6 +100,7 @@
       </property>
       <property name="font">
        <font>
+        <family>Microsoft YaHei</family>
         <pointsize>12</pointsize>
        </font>
       </property>
