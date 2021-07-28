@@ -106,7 +106,9 @@ void MainWindow::waitAnimation(bool running) {
 
 	ui->tableWidget->blockSignals(true);
 	ui->tableWidget->setAlternatingRowColors(true);
-	ui->tableWidget->setStyleSheet("alternate-background-color: #8080ab; background: white; color: #21d9c9; ");
+	ui->tableWidget->setStyleSheet("alternate-background-color: #8080ab;" 
+		                           "background: white; color: #21d9c9;" 
+		                          );
 }
 
 void MainWindow::scanning() {
@@ -148,7 +150,9 @@ void MainWindow::updateTable(Device *dev)
 
 	//ui setting
 	ui->tableWidget->setAlternatingRowColors(true);
-	ui->tableWidget->setStyleSheet("alternate-background-color: #e1eef0; background: white; color: #2126cc; ");
+	ui->tableWidget->setStyleSheet("alternate-background-color: #e1eef0;" 
+		                           "background: white; color: #2126cc;" 
+		                           "font: 10pt Comic Sans MS;");
 }
 
 void MainWindow::signInOpen(int row, int column){
@@ -221,7 +225,9 @@ void MainWindow::handleResponse(Device *dev, const QJsonObject &obj) {
 		waitAnimation(false);
 		ui->tableWidget->blockSignals(false);
 		ui->tableWidget->setAlternatingRowColors(true);
-		ui->tableWidget->setStyleSheet("alternate-background-color: #dcf2d8; background: white; color: #152ae8; ");
+		ui->tableWidget->setStyleSheet("alternate-background-color: #dcf2d8;" 
+			                           "background: white; color: #152ae8;" 
+			                           "font: 10pt Comic Sans MS;");
 		secUdp.cmdSend("GetUsers", NULL);
 		return;
 	}
