@@ -70,6 +70,7 @@ QPushButton#btnQuit:hover {background-color:#dade73; color: #0dadde}
       </property>
       <property name="font">
        <font>
+        <family>sans-serif</family>
         <pointsize>14</pointsize>
        </font>
       </property>

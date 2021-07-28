@@ -30,6 +30,7 @@ dialogUser::~dialogUser()
 void dialogUser::updateUserinfo(const QJsonObject &obj, Device *dev) {
 	if (SHOWDEBUG) qDebug() << __func__;
 	currentUser = dev->username;
+	ui->label->setText(currentUser + "  Login");
 
 	ui->tableWidget->setRowCount(0);
 	QJsonArray array = obj["users"].toArray();
@@ -124,7 +125,8 @@ void dialogUser::DelBtnUI(int row, int column) {
 	}
 	else {
 		ui->btnDel->setEnabled(true);
-		ui->btnDel->setStyleSheet("background-color: #bcaaa4");
+		ui->btnDel->setStyleSheet("hover {background-color: #dade73; color: #0dadde}"
+			                      "background-color: #bcaaa4");
 	}
 
 }

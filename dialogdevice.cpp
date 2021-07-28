@@ -70,6 +70,7 @@ void dialogDevice::updateDevInfo(const QJsonObject &obj, Device *dev) {
 	if(QString::compare(nowAuth, "0") == 0) {
 		ui->labUser->setText("\"" + nowUser + "\" Login (Admin)");
 		ui->btnEdit->setEnabled(true);
+		ui->btnEdit->setStyleSheet("hover {color: #laadad};" "background-color: #e0baba;");
 	}
 	else if (QString::compare(nowAuth, "1") == 0) {
 		ui->labUser->setText("\"" + nowUser + "\" Login (Operator)");
