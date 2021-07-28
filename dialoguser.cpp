@@ -3,6 +3,7 @@
 #include <QMessageBox>
 #include <QRegExpValidator>
 #include "dialoguseredit.h"
+#include "Utils.h"
 
 dialogUser::dialogUser(QWidget *parent) :
     QDialog(parent),
@@ -14,9 +15,11 @@ dialogUser::dialogUser(QWidget *parent) :
 
 	connect(ui->btnAdd, &QPushButton::clicked, this, &dialogUser::userAddOpen);
 	connect(ui->btnEdit, &QPushButton::clicked, this, &dialogUser::userEditOpen);
-
 	connect(ui->btnDel, &QPushButton::clicked, this, &dialogUser::userDel);
 	connect(ui->btnQuit, &QPushButton::clicked, this, &dialogUser::userQuit);
+	connect(ui->tableWidget, &QTableWidget::cellClicked, this, &dialogUser::DelBtnUI);
+	
+	//Utils::enableButtonWithUI(true, nullptr);
 }
 
 dialogUser::~dialogUser()
@@ -24,8 +27,10 @@ dialogUser::~dialogUser()
     delete ui;
 }
 
-void dialogUser::updateUserinfo(const QJsonObject &obj) {
+void dialogUser::updateUserinfo(const QJsonObject &obj, Device *dev) {
 	if (SHOWDEBUG) qDebug() << __func__;
+	currentUser = dev->username;
+
 	ui->tableWidget->setRowCount(0);
 	QJsonArray array = obj["users"].toArray();
 
@@ -51,6 +56,8 @@ void dialogUser::updateUserinfo(const QJsonObject &obj) {
 	}
 	ui->tableWidget->setColumnWidth(0, 135);
 	ui->tableWidget->setColumnWidth(1, 135);
+
+	emit ui->tableWidget->cellClicked(0, 0);
 }
 
 void dialogUser::userAddOpen(){
@@ -83,7 +90,6 @@ void dialogUser::userEditOpen(){
 
 void dialogUser::userDel(){
 	int reply;
-
 	if (ui->tableWidget->rowCount() == 1) {
 		reply = QMessageBox::question(this, "User Delete", "You cannot delete the last user.  ", QMessageBox::Ok);
 		return;
@@ -92,6 +98,11 @@ void dialogUser::userDel(){
 	int index;
 	index = ui->tableWidget->currentRow();
 	if (SHOWDEBUG) qDebug() << "currentRow:" << ui->tableWidget->currentRow();
+	
+	//if (QString::compare(currentUser, ui->tableWidget->item(index, 0)->text()) == 0) {
+	//	reply = QMessageBox::question(this, "User Delete", "You cannot delete self.  ", QMessageBox::Ok);
+	//	return;
+	//}
 
 	reply = QMessageBox::question(this, "User Delete", "Do you want delecte user:" + 
 		ui->tableWidget->item(index, 0)->text() + " ?",
@@ -108,4 +119,17 @@ void dialogUser::userDel(){
 void dialogUser::userQuit(){
 	//emit userQuitSignal();
 	done(btnQuit);
+}
+
+void dialogUser::DelBtnUI(int row, int column) {
+	if (QString::compare(currentUser, ui->tableWidget->item(row, 0)->text()) == 0) {
+		ui->btnDel->setEnabled(false);
+		ui->btnDel->setStyleSheet("background-color: rgb(206, 207, 192);"
+			                      "color: rgb(255, 255, 255)");
+	}
+	else {
+		ui->btnDel->setEnabled(true);
+		ui->btnDel->setStyleSheet("background-color: #bcaaa4");
+	}
+
 }

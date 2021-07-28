@@ -47,7 +47,8 @@ HEADERS += \
         dialoguseredit.h \
         mainwindow.h \
         secureudp.h \
-        crypto.h
+        crypto.h \
+        device.h
 
 FORMS += \
         dialogdevice.ui \

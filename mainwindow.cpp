@@ -77,13 +77,14 @@ void MainWindow::initialUI() {
 	ui->tableWidget->setColumnWidth(3, 180);
 	ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
+
 	//Btn UI
 	ui->probBtn->setStyleSheet("background-color: rgb(166, 225, 252);"
-		"font: 87 12pt Arial Black;"
+		"font: 87 12pt Arial Black;" 
 		"color: rgb(0, 0, 0);");
 	ui->cleanBtn->setStyleSheet("background-color: rgb(167,251,183);"
-		"font: 87 12pt Arial Black;"
-		"color: rgb(0, 0, 0)");
+		                       "font: 87 12pt Arial Black;"
+		                       "color: rgb(0, 0, 0)");
 }
 
 void MainWindow::waitAnimation(bool running) {
@@ -125,6 +126,9 @@ void MainWindow::cleanTable() {
 		"color: rgb(0, 0, 0)");
 	QStringList tableHeader = { "MAC", "Model", "Name", "IP" };
 	ui->tableWidget->setHorizontalHeaderLabels(tableHeader);
+	//ui->cleanBtn->setStyleSheet("background-color: rgb(166, 225, 252);"
+	//	                        "font: 87 8pt Arial Black;"
+	//	                        "color: rgb(0, 0, 0)");
 }
 
 void MainWindow::updateTable(Device *dev)
@@ -144,7 +148,7 @@ void MainWindow::updateTable(Device *dev)
 
 	//ui setting
 	ui->tableWidget->setAlternatingRowColors(true);
-	ui->tableWidget->setStyleSheet("alternate-background-color: #e1eef0; background: white; color: #530354; ");
+	ui->tableWidget->setStyleSheet("alternate-background-color: #e1eef0; background: white; color: #2126cc; ");
 }
 
 void MainWindow::signInOpen(int row, int column){
@@ -201,18 +205,20 @@ void MainWindow::handleResponse(Device *dev, const QJsonObject &obj) {
 		return;
 	}
 	else if (obj["response"] == "GetUsers") {
-		dialogUserObj.updateUserinfo(obj);
+		Device *dev = secUdp.getDevice();
+		if (SHOWDEBUG) qDebug() << dev->username;
+		dialogUserObj.updateUserinfo(obj, dev);
 		dialogUserObj.exec();
 		return;
 	}
 	else if (obj["response"] == "DelUser" ||
 		     obj["response"] == "AddUser" ||
 		     obj["response"] == "SetUser") {
-		secUdp.cmdSend("GetUsers", NULL);
 		waitAnimation(false);
 		ui->tableWidget->blockSignals(false);
 		ui->tableWidget->setAlternatingRowColors(true);
 		ui->tableWidget->setStyleSheet("alternate-background-color: #dcf2d8; background: white; color: #152ae8; ");
+		secUdp.cmdSend("GetUsers", NULL);
 		return;
 	}
 	else {

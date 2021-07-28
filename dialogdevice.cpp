@@ -13,9 +13,7 @@ dialogDevice::dialogDevice(QWidget *parent) :
 	setWindowTitle("Device Information");
 	connect(ui->btnOn, &QAbstractButton::clicked, this, &dialogDevice::dhcpOn);
 	connect(ui->btnOff, &QAbstractButton::clicked, this, &dialogDevice::dhcpOff);
-
 	connect(ui->btnExit, &QAbstractButton::clicked, this, &dialogDevice::dialogQuit);
-
 	connect(ui->btnUpdate, &QAbstractButton::clicked, this, &dialogDevice::setNetwork);
 	connect(ui->btnEdit, &QAbstractButton::clicked, this, &dialogDevice::userEditReturn);
 }
@@ -55,7 +53,6 @@ void dialogDevice::updateDevInfo(const QJsonObject &obj, Device *dev) {
 		ui->editNetmask->setDisabled(false);
 		ui->editGateway->setDisabled(false);
 		ui->editDNS->setDisabled(false);
-
 	}
 
 	//set other UI
