@@ -36,7 +36,7 @@ private slots:
 	void userAddOpen();
 	void userDel();
 	void userQuit();
-	void DelBtnUI(int row, int column);
+	void updateDelBtnUI(int row, int column);
 
 signals:
 	void userQuitSignal();

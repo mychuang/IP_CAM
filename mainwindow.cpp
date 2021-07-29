@@ -6,8 +6,6 @@
 #include "ui_mainwindow.h"
 #include "dialogLogin.h"
 
-
-
 uint8_t mac[6];
 extern QList<Device *> deviceList;
 QString getMacAddress(uint8_t *mac) {
@@ -69,7 +67,7 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::initialUI() {
-	setWindowTitle("Lumens Device Search v2.3");
+	setWindowTitle("Lumens Device Search v2.3.1");
 	ui->tableWidget->setRowCount(0);
 	ui->tableWidget->setColumnWidth(0, 180);
 	ui->tableWidget->setColumnWidth(1, 210);

@@ -17,7 +17,7 @@ dialogUser::dialogUser(QWidget *parent) :
 	connect(ui->btnEdit, &QPushButton::clicked, this, &dialogUser::userEditOpen);
 	connect(ui->btnDel, &QPushButton::clicked, this, &dialogUser::userDel);
 	connect(ui->btnQuit, &QPushButton::clicked, this, &dialogUser::userQuit);
-	connect(ui->tableWidget, &QTableWidget::cellClicked, this, &dialogUser::DelBtnUI);
+	connect(ui->tableWidget, &QTableWidget::cellClicked, this, &dialogUser::updateDelBtnUI);
 	
 	//Utils::enableButtonWithUI(true, nullptr);
 }
@@ -117,8 +117,9 @@ void dialogUser::userQuit(){
 	done(btnQuit);
 }
 
-void dialogUser::DelBtnUI(int row, int column) {
-	if (QString::compare(currentUser, ui->tableWidget->item(row, 0)->text()) == 0) {
+void dialogUser::updateDelBtnUI(int row, int column) {
+	if (QString::compare(currentUser, ui->tableWidget->item(row, 0)->text()) == 0 ||
+		QString::compare(ui->tableWidget->item(row, 0)->text(), ui->tableWidget->item(0, 0)->text()) == 0) {
 		ui->btnDel->setEnabled(false);
 		ui->btnDel->setStyleSheet("background-color: rgb(206, 207, 192);"
 			                      "color: rgb(255, 255, 255)");
@@ -128,5 +129,4 @@ void dialogUser::DelBtnUI(int row, int column) {
 		ui->btnDel->setStyleSheet("hover {background-color: #dade73; color: #0dadde}"
 			                      "background-color: #bcaaa4");
 	}
-
 }
